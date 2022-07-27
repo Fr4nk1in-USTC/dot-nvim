@@ -51,6 +51,7 @@ require("mason-lspconfig").setup({
 		"vim-language-server",
 		"json-lsp",
 		"pyright",
+		"clangd",
 	},
 	automatic_installation = true,
 })

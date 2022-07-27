@@ -9,7 +9,8 @@ local sources = {
 	formatting.stylua,
 	formatting.shfmt,
 	formatting.clang_format.with({
-		extra_args = { "-style=file:'/home/fushen/.clang-format'", "-fallback-style=none" },
+		extra_args = { "-style=file" },
+		prefer_local = "/usr/loacl/bin/clang-format",
 	}),
 	formatting.latexindent,
 	formatting.prettier,
