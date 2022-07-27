@@ -53,10 +53,10 @@ end, opts)
 
 -- terminal
 -- float terminal also you can pass the cli command in open_float_terminal function
-map("n", "<C-\\>", function()
+map("n", "<A-\\>", function()
 	require("lspsaga.floaterm").open_float_terminal("zsh")
 end, opts)
-map("t", "<C-\\>", function()
-	-- vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true))
+map("t", "<A-\\>", function()
+	vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true))
 	require("lspsaga.floaterm").close_float_terminal()
 end, { silent = true })
