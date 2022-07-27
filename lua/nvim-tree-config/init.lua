@@ -14,6 +14,10 @@ require("nvim-tree").setup({
 			} },
 		},
 	},
+	git = {
+		enable = true,
+		ignore = false,
+	},
 	renderer = {
 		group_empty = true,
 	},
