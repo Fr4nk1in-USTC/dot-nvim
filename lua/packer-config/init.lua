@@ -74,4 +74,8 @@ return require("packer").startup(function()
 
 	-- Shade
 	use("sunjon/shade.nvim")
+
+	-- Git
+	use("kdheepak/lazygit.nvim")
+	use("lewis6991/gitsigns.nvim")
 end)
