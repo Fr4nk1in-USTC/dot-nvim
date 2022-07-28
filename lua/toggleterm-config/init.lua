@@ -25,6 +25,5 @@ require("toggleterm").setup({
 local map = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
 
-map("t", "<esc>", "<C-\\><C-n>", opts)
 map("n", "<C-v>", ":ToggleTerm direction=vertical<CR>", opts)
 map("n", "<C-h>", ":ToggleTerm direction=horizontal<CR>", opts)

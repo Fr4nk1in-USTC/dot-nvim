@@ -35,7 +35,7 @@ return require("packer").startup(function()
 		branch = "main",
 	})
 	use("https://git.sr.ht/~whynothugo/lsp_lines.nvim")
-
+	use("ray-x/lsp_signature.nvim")
 	-- Null-ls
 	use("jose-elias-alvarez/null-ls.nvim")
 

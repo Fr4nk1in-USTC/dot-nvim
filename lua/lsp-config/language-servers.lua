@@ -12,6 +12,11 @@ local on_attach = function(client, bufnr)
 	-- Enable completion triggered by <c-x><c-o>
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
+	-- Lsp_signature
+	require("lsp_signature").on_attach({
+		toggle_key = "<C-s>",
+	})
+
 	-- Mappings.
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
 	local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -20,7 +25,7 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
 	vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
 	vim.keymap.set("n", "gR", vim.lsp.buf.references, bufopts)
-	vim.keymap.set("n", "<C-f>", vim.lsp.buf.formatting, bufopts)
+	vim.keymap.set("n", "<A-f>", vim.lsp.buf.formatting, bufopts)
 
 	client.resolved_capabilities.document_formatting = false
 end

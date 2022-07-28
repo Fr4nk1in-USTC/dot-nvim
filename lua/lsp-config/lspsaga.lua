@@ -5,6 +5,7 @@ local kind = require("lspsaga.lspkind")
 
 saga.init_lsp_saga({
 	border_style = "rounded",
+	saga_winblend = 10,
 })
 
 local map = vim.keymap.set
@@ -31,14 +32,17 @@ map("n", "<C-b>", function()
 	require("lspsaga.action").smart_scroll_with_saga(-1)
 end, { silent = true })
 
+-- signature help
+map("n", "<C-s>", require("lspsaga.signaturehelp").signature_help, opts)
+
 -- rename
 map("n", "gr", require("lspsaga.rename").lsp_rename, opts)
 
 -- preview definition
-map("n", "pd", require("lspsaga.definition").preview_definition, opts)
+map("n", "gpd", require("lspsaga.definition").preview_definition, opts)
 
 -- diagnostics
-map("n", "<leader>cd", require("lspsaga.diagnostic").show_line_diagnostics, opts)
+map("n", "<leader>d", require("lspsaga.diagnostic").show_line_diagnostics, opts)
 map("n", "[e", require("lspsaga.diagnostic").goto_prev, opts)
 map("n", "]e", require("lspsaga.diagnostic").goto_next, opts)
 map("n", "[E", function()
