@@ -69,6 +69,9 @@ return require("packer").startup(function()
 		tag = "v2.*",
 	})
 
+	-- Comment
+	use("numToStr/Comment.nvim")
+
 	-- Shade
 	use("sunjon/shade.nvim")
 end)
