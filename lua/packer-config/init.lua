@@ -63,6 +63,12 @@ return require("packer").startup(function()
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 
+	-- Terminal
+	use({
+		"akinsho/toggleterm.nvim",
+		tag = "v2.*",
+	})
+
 	-- Shade
 	use("sunjon/shade.nvim")
 end)

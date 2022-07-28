@@ -31,9 +31,6 @@ map("n", "<C-b>", function()
 	require("lspsaga.action").smart_scroll_with_saga(-1)
 end, { silent = true })
 
--- signature help
-map("n", "gs", require("lspsaga.signaturehelp").signature_help, opts)
-
 -- rename
 map("n", "gr", require("lspsaga.rename").lsp_rename, opts)
 
@@ -50,13 +47,3 @@ end, opts)
 map("n", "]E", function()
 	require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
 end, opts)
-
--- terminal
--- float terminal also you can pass the cli command in open_float_terminal function
-map("n", "<A-\\>", function()
-	require("lspsaga.floaterm").open_float_terminal("zsh")
-end, opts)
-map("t", "<A-\\>", function()
-	vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true))
-	require("lspsaga.floaterm").close_float_terminal()
-end, { silent = true })
