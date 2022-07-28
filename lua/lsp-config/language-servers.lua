@@ -56,11 +56,22 @@ require("mason-lspconfig").setup({
 	automatic_installation = true,
 })
 
+local clangd_capabilities = capabilities
+clangd_capabilities.textDocument.semanticHighlighting = true
+clangd_capabilities.offsetEncoding = "utf-8"
+
 require("mason-lspconfig").setup_handlers({
 	function(server_name)
 		require("lspconfig")[server_name].setup({
 			on_attach = on_attach,
 			capabilities = capabilities,
+			flags = lsp_flags,
+		})
+	end,
+	["clangd"] = function()
+		require("lspconfig").clangd.setup({
+			on_attach = on_attach,
+			capabilities = clangd_capabilities,
 			flags = lsp_flags,
 		})
 	end,
