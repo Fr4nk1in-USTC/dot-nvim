@@ -2,6 +2,9 @@ return require("packer").startup(function()
 	-- Packer can manage itself
 	use("wbthomason/packer.nvim")
 
+	-- Plenary
+	use("nvim-lua/plenary.nvim")
+
 	-- Web Devicons
 	use("kyazdani42/nvim-web-devicons")
 
@@ -36,8 +39,12 @@ return require("packer").startup(function()
 	})
 	use("https://git.sr.ht/~whynothugo/lsp_lines.nvim")
 	use("ray-x/lsp_signature.nvim")
+
 	-- Null-ls
 	use("jose-elias-alvarez/null-ls.nvim")
+
+	-- Code Runner
+	use("CRAG666/code_runner.nvim")
 
 	-- Treesitter
 	use({
@@ -60,7 +67,6 @@ return require("packer").startup(function()
 	use({
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.0",
-		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 
 	-- Terminal
