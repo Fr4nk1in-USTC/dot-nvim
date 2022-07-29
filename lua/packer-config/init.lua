@@ -40,6 +40,11 @@ return require("packer").startup(function()
 	use("https://git.sr.ht/~whynothugo/lsp_lines.nvim")
 	use("ray-x/lsp_signature.nvim")
 
+	-- Debugger Adapter
+	use("mfussenegger/nvim-dap")
+	use("rcarriga/nvim-dap-ui")
+	use("theHamsta/nvim-dap-virtual-text")
+
 	-- Null-ls
 	use("jose-elias-alvarez/null-ls.nvim")
 
