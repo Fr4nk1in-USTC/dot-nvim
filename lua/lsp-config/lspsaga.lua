@@ -1,11 +1,16 @@
 local saga = require("lspsaga")
 
--- change the lsp symbol kind
-local kind = require("lspsaga.lspkind")
-
 saga.init_lsp_saga({
 	border_style = "rounded",
 	saga_winblend = 10,
+	code_action_icon = "💡",
+	code_action_lightbulb = {
+		enable = true,
+		sign = false,
+		enable_in_insert = false,
+		sign_priority = 20,
+		virtual_text = true,
+	},
 })
 
 local map = vim.keymap.set
