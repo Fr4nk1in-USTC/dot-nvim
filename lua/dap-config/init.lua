@@ -82,7 +82,28 @@ vim.fn.sign_define("DapStopped", {
 	numhl = "DapStopped",
 })
 
+-- DAP UI
+dapui.setup({
+	mappings = {
+		-- Use a table to apply multiple mappings
+		expand = { "<CR>", "<2-LeftMouse>" },
+		open = "<C-o>",
+		remove = "<C-d>",
+		edit = "<C-e>",
+		repl = "<C-r>",
+		toggle = "<C-t>",
+	},
+})
+
+-- DAP Virtual Text
+require("nvim-dap-virtual-text").setup({
+	commented = true,
+	all_referrences = true,
+	highlight_new_as_changed = true,
+})
+
 -- DAP Configuration
+-- Python
 dap.adapters.python = {
 	type = "executable",
 	command = "/usr/bin/python",
@@ -111,12 +132,43 @@ dap.configurations.python = {
 	},
 }
 
-dap.adapters.cppdbg = {
-	id = "cppdbg",
-	type = "executable",
-	command = "/home/fushen/.local/share/nvim/dapinstall/ccppr_vsc/extension/debugAdapters/bin/OpenDebugAD7",
-}
+-- C/C++/Rust
+dap.adapters.cppdbg = function(cb, config)
+	if config.preLaunchTask then
+		vim.fn.system(config.preLaunchTask)
+	end
+	local adapter = {
+		id = "cppdbg",
+		type = "executable",
+		command = "/home/fushen/.local/share/nvim/dapinstall/ccppr_vsc/extension/debugAdapters/bin/OpenDebugAD7",
+	}
+	cb(adapter)
+end
 dap.configurations.cpp = {
+	{
+		name = "Launch file",
+		type = "cppdbg",
+		request = "launch",
+		preLaunchTask = "g++ -O2 -fdiagnostics-color=always -g ${file} -o ${fileDirname}/${fileBasenameNoExtension}",
+		program = "${fileDirname}/${fileBasenameNoExtension}",
+		cwd = "${workspaceFolder}",
+		stopOnEntry = true,
+		console = "integratedTerminal",
+	},
+}
+dap.configurations.c = {
+	{
+		name = "Launch file",
+		type = "cppdbg",
+		request = "launch",
+		preLaunchTask = "gcc -O2 -fdiagnostics-color=always -g ${file} -o ${fileDirname}/${fileBasenameNoExtension}",
+		program = "${fileDirname}/${fileBasenameNoExtension}",
+		cwd = "${workspaceFolder}",
+		stopOnEntry = true,
+		console = "integratedTerminal",
+	},
+}
+dap.configurations.rust = {
 	{
 		name = "Launch file",
 		type = "cppdbg",
@@ -127,25 +179,3 @@ dap.configurations.cpp = {
 		console = "integratedTerminal",
 	},
 }
-dap.configurations.c = dap.configurations.cpp
-dap.configurations.rust = dap.configurations.cpp
-
--- DAP UI
-dapui.setup({
-	mappings = {
-		-- Use a table to apply multiple mappings
-		expand = { "<CR>", "<2-LeftMouse>" },
-		open = "<C-o>",
-		remove = "<C-d>",
-		edit = "<C-e>",
-		repl = "<C-r>",
-		toggle = "<C-t>",
-	},
-})
-
--- DAP Virtual Text
-require("nvim-dap-virtual-text").setup({
-	commented = true,
-	all_referrences = true,
-	highlight_new_as_changed = true,
-})
