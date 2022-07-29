@@ -127,7 +127,7 @@ dap.configurations.python = {
 				return "/usr/bin/python"
 			end
 		end,
-		stopOnEntry = true,
+		stopOnEntry = false,
 		console = "integratedTerminal",
 	},
 }
@@ -152,8 +152,15 @@ dap.configurations.cpp = {
 		preLaunchTask = "g++ -O2 -fdiagnostics-color=always -g ${file} -o ${fileDirname}/${fileBasenameNoExtension}",
 		program = "${fileDirname}/${fileBasenameNoExtension}",
 		cwd = "${workspaceFolder}",
-		stopOnEntry = true,
+		stopOnEntry = false,
 		console = "integratedTerminal",
+		setupCommands = {
+			{
+				text = "-enable-pretty-printing",
+				description = "enable pretty printing",
+				ignoreFailures = false,
+			},
+		},
 	},
 }
 dap.configurations.c = {
@@ -164,8 +171,15 @@ dap.configurations.c = {
 		preLaunchTask = "gcc -O2 -fdiagnostics-color=always -g ${file} -o ${fileDirname}/${fileBasenameNoExtension}",
 		program = "${fileDirname}/${fileBasenameNoExtension}",
 		cwd = "${workspaceFolder}",
-		stopOnEntry = true,
+		stopOnEntry = false,
 		console = "integratedTerminal",
+		setupCommands = {
+			{
+				text = "-enable-pretty-printing",
+				description = "enable pretty printing",
+				ignoreFailures = false,
+			},
+		},
 	},
 }
 dap.configurations.rust = {
@@ -175,7 +189,14 @@ dap.configurations.rust = {
 		request = "launch",
 		program = "${fileDirname}/${fileBasenameNoExtension}",
 		cwd = "${workspaceFolder}",
-		stopOnEntry = true,
+		stopOnEntry = false,
 		console = "integratedTerminal",
+	},
+	setupCommands = {
+		{
+			text = "-enable-pretty-printing",
+			description = "enable pretty printing",
+			ignoreFailures = false,
+		},
 	},
 }
