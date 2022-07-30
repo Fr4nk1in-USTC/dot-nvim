@@ -20,9 +20,11 @@ set.termguicolors = true
 set.number = true
 set.relativenumber = true
 set.cursorline = true
+set.cursorcolumn = true
+set.colorcolumn = { "80", "120" }
 
 set.hidden = true
 
 set.mouse = "a"
 
-vim.cmd([[set clipboard+=unnamedplus]])
+set.clipboard:append({ "unnamedplus" })
