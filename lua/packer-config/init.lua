@@ -62,6 +62,14 @@ return require("packer").startup(function()
 	-- Jsonc Support
 	use("kevinoid/vim-jsonc") -- json with comment support
 
+	-- Markdown Preview
+	use({
+		"iamcco/markdown-preview.nvim",
+		run = function()
+			vim.fn["mkdp#util#install"]()
+		end,
+	})
+
 	-- Notify
 	use("rcarriga/nvim-notify")
 
