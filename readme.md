@@ -35,7 +35,7 @@ I use Packer.nvim to manage NeoVim plug-in. So we should set it up first.
    git clone --depth 1 https://github.com/wbthomason/packer.nvim
    \ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
    ```
-   > For those who has network issues:
+   > For those who have network issues:
    >
    > ```
    > git clone --depth 1 git@github.com:wbthomason/packer.nvim.git
