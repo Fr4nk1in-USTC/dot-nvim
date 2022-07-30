@@ -28,3 +28,6 @@ set.hidden = true
 set.mouse = "a"
 
 set.clipboard:append({ "unnamedplus" })
+
+set.spell = true
+set.spelllang = "en_us,cjk"
