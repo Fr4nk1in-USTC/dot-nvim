@@ -32,7 +32,6 @@ return require("packer").startup(function()
 	use("onsails/lspkind.nvim")
 	use("williamboman/mason.nvim")
 	use("williamboman/mason-lspconfig.nvim")
-	use("WhoIsSethDaniel/mason-tool-installer.nvim")
 	use({
 		"glepnir/lspsaga.nvim",
 		branch = "main",
