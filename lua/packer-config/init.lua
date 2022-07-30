@@ -69,6 +69,9 @@ return require("packer").startup(function()
 		end,
 	})
 
+	-- LaTeX Support
+	use("lervag/vimtex")
+
 	-- Notify
 	use("rcarriga/nvim-notify")
 

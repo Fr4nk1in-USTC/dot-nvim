@@ -28,3 +28,4 @@ set.hidden = true
 set.mouse = "a"
 
 set.clipboard:append({ "unnamedplus" })
+set.whichwrap = "<,>,h,l,[,]"

@@ -119,6 +119,7 @@ You can customize as you want.
 - Special Language Support
   - [vim-jsonc](https://github.com/kevinoid/vim-jsonc) for JSON with comment.
   - [markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim) for markdown preview support.
+  - [VimTeX](https://github.com/lervag/vimtex) for TeX support.
 - Notification
   - [nvim-notify](https://github.com/rcarriga/nvim-notify)
 - Fuzzy Finder
