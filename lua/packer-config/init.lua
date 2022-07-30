@@ -57,7 +57,6 @@ return require("packer").startup(function()
 	})
 	use("nvim-treesitter/nvim-treesitter-refactor")
 	use("p00f/nvim-ts-rainbow")
-	use("lewis6991/spellsitter.nvim")
 
 	-- Jsonc Support
 	use("kevinoid/vim-jsonc") -- json with comment support

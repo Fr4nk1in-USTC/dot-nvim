@@ -1,4 +1,4 @@
-# Fr4nk1in's NeoVim Configuration
+# Fr4nk1in's Nevis Configuration
 
 This repository stores my NeoVim config files. Most file are written in lua.
 
@@ -116,7 +116,6 @@ You can customize as you want.
   - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) for language syntax highlighting.
   - [nvim-treesitter-refactor](https://github.com/nvim-treesitter/nvim-treesitter-refactor) for treesitter management.
   - [nvim-ts-rainbow](https://github.com/p00f/nvim-ts-rainbow) for bracket coloring.
-  - [spellsitter.nvim](https://github.com/lewis6991/spellsitter.nvim) for spelling check.
 - Special Language Support
   - [vim-jsonc](https://github.com/kevinoid/vim-jsonc) for JSON with comment.
   - [markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim) for markdown preview support.
