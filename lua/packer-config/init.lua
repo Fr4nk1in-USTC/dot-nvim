@@ -1,3 +1,11 @@
+require("packer").init({
+	display = {
+		open_fn = function()
+			return require("packer.util").float({ border = "rounded" })
+		end,
+	},
+})
+
 return require("packer").startup(function()
 	-- Packer can manage itself
 	use("wbthomason/packer.nvim")
@@ -74,6 +82,9 @@ return require("packer").startup(function()
 
 	-- Notify
 	use("rcarriga/nvim-notify")
+
+	-- Startup
+	use("goolord/alpha-nvim")
 
 	-- Github Copilot
 	use("github/copilot.vim")

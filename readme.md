@@ -58,7 +58,7 @@ I use Packer.nvim to manage NeoVim plug-in. So we should set it up first.
       > })
       > ```
       >
-      > Type `:w` in **normal** mode to save the file. And then repeat the operation above.
+      > Type `:wq` in **normal** mode to save the file and quit NeoVim. And then reopen Neovim and repeat the operation above.
    3. Once all plug-ins are installed, press `q` to exit the installation tab, and type `:qa` to quit NeoVim.
    4. Open NeoVim again and all the stuff should be set well.
 
@@ -120,6 +120,8 @@ You can customize as you want.
   - [vim-jsonc](https://github.com/kevinoid/vim-jsonc) for JSON with comment.
   - [markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim) for markdown preview support.
   - [VimTeX](https://github.com/lervag/vimtex) for TeX support.
+- Startup
+  - [alpha-nvim](https://github.com/goolord/alpha-nvim)
 - Notification
   - [nvim-notify](https://github.com/rcarriga/nvim-notify)
 - Fuzzy Finder
@@ -135,6 +137,10 @@ You can customize as you want.
   - [copilot.vim](https://github.com/github/copilot.vim) for Github Copilot integration.
 
 # Screenshots
+
+## Startup Window
+
+![startup](./assets/startup.png)
 
 ## Basic
 

@@ -7,5 +7,5 @@ require("telescope").setup({
 
 map("n", "<leader>ft", ":Telescope<CR>", opts)
 map("n", "<leader>ff", ":Telescope find_files<CR>", opts)
-map("n", "<leader>flg", ":Telescope live_grep<CR>", opts)
+map("n", "<leader>fg", ":Telescope live_grep<CR>", opts)
 map("n", "<leader>fh", ":Telescope help_tags<CR>", opts)
