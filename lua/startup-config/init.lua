@@ -41,7 +41,7 @@ local buttons = {
 		{ type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
 		{ type = "padding", val = 1 },
 		dashboard.button("n", "  New file", "<cmd>ene<CR>"),
-		dashboard.button("e", "פּ  File Explorer", "<cmd>NvimTreeToggle<CR>"),
+		dashboard.button("e", "פּ  File explorer", "<cmd>NvimTreeToggle<CR>"),
 		dashboard.button("f", "  Find file", "<cmd>Telescope find_files<CR>"),
 		dashboard.button("g", "  Live grep", "<cmd>Telescope live_grep<CR>"),
 		dashboard.button("c", "  Configuration", "<cmd>cd ~/.config/nvim/ <CR>"),
