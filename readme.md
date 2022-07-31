@@ -95,6 +95,7 @@ You can customize as you want.
 - LSP Support, Diagnostic, Auto-completion and etc.
   - [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) for LSP basics.
   - [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) for auto-completion.
+  - [cmp-path](https://github.com/hrsh7th/cmp-path) for path source for nvim-cmp.
   - [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) for LSP source for nvim-cmp.
   - [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) for snippet source for nvim-cmp.
   - [LuaSnip](https://github.com/L3MON4D3/LuaSnip) for snippets plugin.
