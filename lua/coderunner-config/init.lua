@@ -13,11 +13,18 @@ require("code_runner").setup({
 })
 
 local map = vim.keymap.set
-local opts = { noremap = true, silent = false }
+local function opts_desc(descriptions)
+	return {
+		noremap = true,
+		silent = true,
+		desc = descriptions,
+	}
+end
 
-map("n", "<leader>r", ":RunFile<CR>", opts)
-map("n", "<leader>rft", ":RunFile tab<CR>", opts)
-map("n", "<leader>rp", ":RunProject<CR>", opts)
-map("n", "<leader>rc", ":RunClose<CR>", opts)
-map("n", "<leader>crf", ":CRFiletype<CR>", opts)
-map("n", "<leader>crp", ":CRProjects<CR>", opts)
+map("n", "<leader>rc", ":RunCode<CR>", opts_desc("Run file or project"))
+map("n", "<leader>rf", ":RunFile<CR>", opts_desc("Run file"))
+map("n", "<leader>rt", ":RunFile tab<CR>", opts_desc("Run file in a new tab"))
+map("n", "<leader>rp", ":RunProject<CR>", opts_desc("Run project"))
+map("n", "<leader>rc", ":RunClose<CR>", opts_desc("Close runner"))
+map("n", "<leader>crf", ":CRFiletype<CR>", opts_desc("Open json with supported files"))
+map("n", "<leader>crp", ":CRProjects<CR>", opts_desc("Open json with list of projects"))

@@ -22,7 +22,7 @@ return require("packer").startup(function()
 	-- Auto close brackets
 	use("windwp/nvim-autopairs")
 
-	-- Plugin nvim-tree
+	-- use nvim-tree
 	use("kyazdani42/nvim-tree.lua")
 
 	-- Statusline
@@ -34,6 +34,7 @@ return require("packer").startup(function()
 	-- LSP Config
 	use("neovim/nvim-lspconfig")
 	use("hrsh7th/nvim-cmp") -- Autocompletion plugin
+	use("hrsh7th/cmp-path") -- Path completion plugin
 	use("hrsh7th/cmp-nvim-lsp") -- LSP source for nvim-cmp
 	use("saadparwaiz1/cmp_luasnip") -- Snippets source for nvim-cmp
 	use("L3MON4D3/LuaSnip") -- Snippets plugin
@@ -69,13 +70,15 @@ return require("packer").startup(function()
 	-- Jsonc Support
 	use("kevinoid/vim-jsonc") -- json with comment support
 
-	-- Markdown Preview
+	-- Markdown Support
 	use({
 		"iamcco/markdown-preview.nvim",
 		run = function()
 			vim.fn["mkdp#util#install"]()
 		end,
 	})
+	use("godlygeek/tabular")
+	use("preservim/vim-markdown")
 
 	-- LaTeX Support
 	use("lervag/vimtex")

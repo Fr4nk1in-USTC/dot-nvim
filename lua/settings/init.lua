@@ -1,4 +1,5 @@
 local set = vim.opt
+local api = vim.api
 
 set.expandtab = true
 set.smarttab = true
@@ -27,5 +28,11 @@ set.hidden = true
 
 set.mouse = "a"
 
-set.clipboard:append({ "unnamedplus" })
+set.clipboard:append("unnamedplus")
 set.whichwrap = "<,>,h,l,[,]"
+
+-- go to last loc when opening a buffer
+api.nvim_create_autocmd(
+	"BufReadPost",
+	{ command = [[if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif]] }
+)
