@@ -27,10 +27,6 @@ g.vimtex_toc_config = {
 }
 
 -- Enable conceal only in latex
-api.nvim_create_autocmd("FileType", {
-	pattern = { "tex", "latex" },
-	command = "setlocal conceallevel=2",
-})
 g.vimtex_syntax_conceal = {
 	["accents"] = 1,
 	["cites"] = 1,
