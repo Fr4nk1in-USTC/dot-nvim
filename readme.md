@@ -4,6 +4,10 @@ This repository stores my NeoVim config files. Most file are written in lua.
 
 Configuration followed by [Tuff Gniuz](https://www.youtube.com/channel/UC1d_1egvm6BjuRz7qcCuoNA)'s [videos](https://youtu.be/qb6fPgZMRF4). Here's his [config repository](https://github.com/tuffgniuz/nvim.lua).
 
+# TODO
+
+Refactor the lua files so that it would be safe to use.
+
 # Setup
 
 > Before setting it up, you should have NeoVim Installed.
