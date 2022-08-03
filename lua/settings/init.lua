@@ -38,3 +38,7 @@ api.nvim_create_autocmd(
 	"BufReadPost",
 	{ command = [[if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif]] }
 )
+
+-- Set Persistent Undo
+set.undofile = true
+set.undodir = vim.fn.expand("$HOME/.config/nvim/undo")
