@@ -58,4 +58,4 @@ require("gitsigns").setup({
 	end,
 })
 
-vim.api.nvim_set_keymap("n", "<leader>gg", ":LazyGit<CR>", { silent = true, desc = "Open lazygit" })
+vim.keymap.set("n", "<leader>gg", ":LazyGit<CR>", { silent = true, desc = "Open lazygit" })

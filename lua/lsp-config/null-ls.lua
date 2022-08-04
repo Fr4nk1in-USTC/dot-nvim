@@ -15,6 +15,7 @@ local sources = {
 	formatting.latexindent,
 	formatting.prettier,
 	formatting.rustfmt,
+	formatting.xmllint,
 }
 
 null_ls.setup({

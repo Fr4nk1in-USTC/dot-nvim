@@ -1,7 +1,5 @@
-local map = vim.api.nvim_set_keymap
-local opts = { noremap = true, silent = true }
-
-map("n", "<leader>nt", ":NvimTreeToggle<CR>", opts)
+local map = require("mappings").map
+map("n", "<leader>nt", ":NvimTreeToggle<CR>", nil, "Toggle NvimTree")
 
 require("nvim-tree").setup({
 	sort_by = "case_sensitive",

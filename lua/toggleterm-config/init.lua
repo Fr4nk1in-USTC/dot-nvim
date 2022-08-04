@@ -22,14 +22,7 @@ require("toggleterm").setup({
 	},
 })
 
-local map = vim.api.nvim_set_keymap
-local function opts_desc(description)
-	return {
-		noremap = true,
-		silent = true,
-		desc = description,
-	}
-end
+local map = require("mappings").map
 
-map("n", "<C-v>", ":ToggleTerm direction=vertical<CR>", opts_desc("Open vertical ToggleTerm"))
-map("n", "<C-h>", ":ToggleTerm direction=horizontal<CR>", opts_desc("Open horizontal ToggleTerm"))
+map("n", "<C-v>", ":ToggleTerm direction=vertical<CR>", nil, "Open vertical ToggleTerm")
+map("n", "<C-h>", ":ToggleTerm direction=horizontal<CR>", nil, "Open horizontal ToggleTerm")

@@ -12,19 +12,12 @@ require("code_runner").setup({
 	},
 })
 
-local map = vim.keymap.set
-local function opts_desc(descriptions)
-	return {
-		noremap = true,
-		silent = true,
-		desc = descriptions,
-	}
-end
+local map = require("mappings").map
 
-map("n", "<leader>rc", ":RunCode<CR>", opts_desc("Run file or project"))
-map("n", "<leader>rf", ":RunFile<CR>", opts_desc("Run file"))
-map("n", "<leader>rt", ":RunFile tab<CR>", opts_desc("Run file in a new tab"))
-map("n", "<leader>rp", ":RunProject<CR>", opts_desc("Run project"))
-map("n", "<leader>rc", ":RunClose<CR>", opts_desc("Close runner"))
-map("n", "<leader>crf", ":CRFiletype<CR>", opts_desc("Open json with supported files"))
-map("n", "<leader>crp", ":CRProjects<CR>", opts_desc("Open json with list of projects"))
+map("n", "<leader>rc", ":RunCode<CR>", nil, "Run file or project")
+map("n", "<leader>rf", ":RunFile<CR>", nil, "Run file")
+map("n", "<leader>rt", ":RunFile tab<CR>", nil, "Run file in a new tab")
+map("n", "<leader>rp", ":RunProject<CR>", nil, "Run project")
+map("n", "<leader>rc", ":RunClose<CR>", nil, "Close runner")
+map("n", "<leader>crf", ":CRFiletype<CR>", nil, "Open json with supported files")
+map("n", "<leader>crp", ":CRProjects<CR>", nil, "Open json with list of projects")
