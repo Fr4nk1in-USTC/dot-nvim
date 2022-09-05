@@ -1,519 +1,703 @@
-local status, gl = pcall(require, "galaxyline")
+-- Feline
+-- https://github.com/EdenEast/nightfox.nvim/blob/main/mics/feline.lua
+--
+-- This file is a complete example of creating the feline configuration shown in the readme of
+-- nightfox. This configuration generates its own highlight groups from the currently applied
+-- colorscheme. These highlight groups are regenreated on colorscheme changes.
+--
+-- Required plugins:
+--    - `feline-nvim/feline.nvim`
+--    - `kyazdani42/nvim-web-devicons`
+--
+-- This file is required to be in your `lua` folder of your config.  Your colorscheme should also
+-- be applied before this file is sourced. This file cannot be located `lua/feline.lua` as this
+-- would clash with the actual plugin require path.
+--
+-- # Example:
+--
+-- ```lua
+-- vim.cmd("colorscheme nightfox")
+-- require('user.ui.feline')
+-- ```
+--
+-- This assumes that this file is located at `lua/user/ui/feline.lua`
+local status, feline = pcall(require, "feline")
 if not status then
 	return
 end
 
-local gls = gl.section
+local fmt = string.format
 
--- VistaPlugin = extension.vista_nearest
+----------------------------------------------------------------------------------------------------
+-- Colors
 
-local themes_match = {
-	gruvbox = "#261C00",
-	everforest = "#282E2C",
-	deus = "#16191D",
-}
-
-local line_bg_color = themes_match[vim.g.colors_name]
-
-local colors = {
-	bg = "#5C687A",
-	line_bg = "#282E2C",
-	fg = "#8FBCBB",
-	fg_green = "#65a380",
-	dark = "#232831",
-	yellow = "#E5C07B",
-	cyan = "#70C0BA",
-	darkblue = "#83A598",
-	green = "#98C379",
-	orange = "#FF8800",
-	purple = "#C678DD",
-	magenta = "#C858E9",
-	blue = "#73BA9F",
-	red = "#D54E53",
-}
-
-local use_coc = false
-if vim.g.nerd_galaxyline_lsp == "coc" then
-	use_coc = true
-end
-
-local function lsp_status(status)
-	local shorter_stat = ""
-	for match in string.gmatch(status, "[^%s]+") do
-		local err_warn = string.find(match, "^[WE]%d+", 0)
-		if not err_warn then
-			shorter_stat = shorter_stat .. " " .. match
-		end
-	end
-	return shorter_stat
-end
-
-local function get_coc_lsp()
-	local status = vim.fn["coc#status"]()
-	if not status or status == "" then
-		return ""
-	end
-	return lsp_status(status)
-end
-
-local function get_diagnostic_info()
-	if vim.fn.exists("*coc#rpc#start_server") == 1 then
-		return get_coc_lsp()
-	end
-	return ""
-end
-
-local function get_current_func()
-	local has_func, func_name = pcall(vim.fn.nvim_buf_get_var, 0, "coc_current_function")
-	if not has_func then
-		return
-	end
-	return func_name
-end
-
-local function get_function_info()
-	if vim.fn.exists("*coc#rpc#start_server") == 1 then
-		return get_current_func()
-	end
-	return ""
-end
-
-local function trailing_whitespace()
-	local trail = vim.fn.search("\\s$", "nw")
-	if trail ~= 0 then
-		return " "
-	else
-		return nil
+---Convert color number to hex string
+---@param n number
+---@return string
+local hex = function(n)
+	if n then
+		return fmt("#%06x", n)
 	end
 end
 
-CocStatus = get_diagnostic_info
-CocFunc = get_function_info
-TrailingWhiteSpace = trailing_whitespace
-
-local function has_file_type()
-	local f_type = vim.bo.filetype
-	if not f_type or f_type == "" then
-		return false
+---Parse `style` string into nvim_set_hl options
+---@param style string
+---@return table
+local function parse_style(style)
+	if not style or style == "NONE" then
+		return {}
 	end
-	return true
-end
 
-local buffer_not_empty = function()
-	if vim.fn.empty(vim.fn.expand("%:t")) ~= 1 then
-		return true
+	local result = {}
+	for token in string.gmatch(style, "([^,]+)") do
+		result[token] = true
 	end
-	return false
+
+	return result
 end
 
--- insert_left insert item at the left panel
-local function insert_left(element)
-	table.insert(gls.left, element)
+---Get highlight opts for a given highlight group name
+---@param name string
+---@return table
+local function get_highlight(name)
+	local hl = vim.api.nvim_get_hl_by_name(name, true)
+	if hl.link then
+		return get_highlight(hl.link)
+	end
+
+	local result = parse_style(hl.style)
+	result.fg = hl.foreground and hex(hl.foreground)
+	result.bg = hl.background and hex(hl.background)
+	result.sp = hl.special and hex(hl.special)
+
+	return result
 end
 
--- insert_blank_line_at_left insert blank line with
--- line_bg color.
-local function insert_blank_line_at_left()
-	insert_left({
-		Space = {
-			provider = function()
-				return " "
-			end,
-			highlight = { colors.bg, colors.bg },
+---Set highlight group from provided table
+---@param groups table
+local function set_highlights(groups)
+	for group, opts in pairs(groups) do
+		vim.api.nvim_set_hl(0, group, opts)
+	end
+end
+
+---Generate a color palette from the current applied colorscheme
+---@return table
+local function generate_pallet_from_colorscheme()
+    -- stylua: ignore
+    local color_map = {
+        black = {
+            index = 0,
+            default = "#393b44"
+        },
+        red = {
+            index = 1,
+            default = "#c94f6d"
+        },
+        green = {
+            index = 2,
+            default = "#81b29a"
+        },
+        yellow = {
+            index = 3,
+            default = "#dbc074"
+        },
+        blue = {
+            index = 4,
+            default = "#719cd6"
+        },
+        magenta = {
+            index = 5,
+            default = "#9d79d6"
+        },
+        cyan = {
+            index = 6,
+            default = "#63cdcf"
+        },
+        white = {
+            index = 7,
+            default = "#dfdfe0"
+        }
+    }
+
+	local diagnostic_map = {
+		hint = {
+			hl = "DiagnosticHint",
+			default = color_map.green.default,
 		},
+		info = {
+			hl = "DiagnosticInfo",
+			default = color_map.blue.default,
+		},
+		warn = {
+			hl = "DiagnosticWarn",
+			default = color_map.yellow.default,
+		},
+		error = {
+			hl = "DiagnosticError",
+			default = color_map.red.default,
+		},
+	}
+
+	local pallet = {}
+	for name, value in pairs(color_map) do
+		local global_name = "terminal_color_" .. value.index
+		pallet[name] = vim.g[global_name] and vim.g[global_name] or value.default
+	end
+
+	for name, value in pairs(diagnostic_map) do
+		pallet[name] = get_highlight(value.hl).fg or value.default
+	end
+
+	pallet.sl = get_highlight("StatusLine")
+	pallet.sel = get_highlight("TabLineSel")
+
+	return pallet
+end
+
+---Generate user highlight groups based on the curent applied colorscheme
+---
+---NOTE: This is a global because I dont known where this file will be in your config
+---and it is needed for the autocmd below
+_G._generate_user_statusline_highlights = function()
+	local pal = generate_pallet_from_colorscheme()
+
+    -- stylua: ignore
+    local sl_colors = {
+        Black = {
+            fg = pal.black,
+            bg = pal.white
+        },
+        Red = {
+            fg = pal.red,
+            bg = pal.sl.bg
+        },
+        Green = {
+            fg = pal.green,
+            bg = pal.sl.bg
+        },
+        Yellow = {
+            fg = pal.yellow,
+            bg = pal.sl.bg
+        },
+        Blue = {
+            fg = pal.blue,
+            bg = pal.sl.bg
+        },
+        Magenta = {
+            fg = pal.magenta,
+            bg = pal.sl.bg
+        },
+        Cyan = {
+            fg = pal.cyan,
+            bg = pal.sl.bg
+        },
+        White = {
+            fg = pal.white,
+            bg = pal.black
+        }
+    }
+
+	local colors = {}
+	for name, value in pairs(sl_colors) do
+		colors["User" .. name] = {
+			fg = value.fg,
+			bg = value.bg,
+			bold = true,
+		}
+		colors["UserRv" .. name] = {
+			fg = value.bg,
+			bg = value.fg,
+			bold = true,
+		}
+	end
+
+	local status = vim.o.background == "dark" and {
+		fg = pal.black,
+		bg = pal.white,
+	} or {
+		fg = pal.white,
+		bg = pal.black,
+	}
+
+	local groups = {
+		-- statusline
+		UserSLHint = {
+			fg = pal.sl.bg,
+			bg = pal.hint,
+			bold = true,
+		},
+		UserSLInfo = {
+			fg = pal.sl.bg,
+			bg = pal.info,
+			bold = true,
+		},
+		UserSLWarn = {
+			fg = pal.sl.bg,
+			bg = pal.warn,
+			bold = true,
+		},
+		UserSLError = {
+			fg = pal.sl.bg,
+			bg = pal.error,
+			bold = true,
+		},
+		UserSLStatus = {
+			fg = status.fg,
+			bg = status.bg,
+			bold = true,
+		},
+
+		UserSLFtHint = {
+			fg = pal.sel.bg,
+			bg = pal.hint,
+		},
+		UserSLHintInfo = {
+			fg = pal.hint,
+			bg = pal.info,
+		},
+		UserSLInfoWarn = {
+			fg = pal.info,
+			bg = pal.warn,
+		},
+		UserSLWarnError = {
+			fg = pal.warn,
+			bg = pal.error,
+		},
+		UserSLErrorStatus = {
+			fg = pal.error,
+			bg = status.bg,
+		},
+		UserSLStatusBg = {
+			fg = status.bg,
+			bg = pal.sl.bg,
+		},
+
+		UserSLAlt = pal.sel,
+		UserSLAltSep = {
+			fg = pal.sl.bg,
+			bg = pal.sel.bg,
+		},
+		UserSLGitBranch = {
+			fg = pal.yellow,
+			bg = pal.sl.bg,
+		},
+		UserSLGitAdd = {
+			fg = pal.green,
+			bg = pal.sl.bg,
+		},
+		UserSLGitChange = {
+			fg = pal.yellow,
+			bg = pal.sl.bg,
+		},
+		UserSLGitRemove = {
+			fg = pal.red,
+			bg = pal.sl.bg,
+		},
+	}
+
+	set_highlights(vim.tbl_extend("force", colors, groups))
+end
+
+_generate_user_statusline_highlights()
+
+vim.api.nvim_create_augroup("UserStatuslineHighlightGroups", {
+	clear = true,
+})
+vim.api.nvim_create_autocmd({ "SessionLoadPost", "ColorScheme" }, {
+	callback = function()
+		_generate_user_statusline_highlights()
+	end,
+})
+
+----------------------------------------------------------------------------------------------------
+-- Feline
+
+local vi = {
+	-- Map vi mode to text name
+	text = {
+		n = "NORMAL",
+		no = "NORMAL",
+		i = "INSERT",
+		v = "VISUAL",
+		V = "V-LINE",
+		[""] = "V-BLOCK",
+		c = "COMMAND",
+		cv = "COMMAND",
+		ce = "COMMAND",
+		R = "REPLACE",
+		Rv = "REPLACE",
+		s = "SELECT",
+		S = "SELECT",
+		[""] = "SELECT",
+		t = "TERMINAL",
+	},
+
+	-- Maps vi mode to highlight group color defined above
+	colors = {
+		n = "UserRvCyan",
+		no = "UserRvCyan",
+		i = "UserSLStatus",
+		v = "UserRvMagenta",
+		V = "UserRvMagenta",
+		[""] = "UserRvMagenta",
+		R = "UserRvRed",
+		Rv = "UserRvRed",
+		r = "UserRvBlue",
+		rm = "UserRvBlue",
+		s = "UserRvMagenta",
+		S = "UserRvMagenta",
+		[""] = "FelnMagenta",
+		c = "UserRvYellow",
+		["!"] = "UserRvBlue",
+		t = "UserRvBlue",
+	},
+
+	-- Maps vi mode to seperator highlight goup defined above
+	sep = {
+		n = "UserCyan",
+		no = "UserCyan",
+		i = "UserSLStatusBg",
+		v = "UserMagenta",
+		V = "UserMagenta",
+		[""] = "UserMagenta",
+		R = "UserRed",
+		Rv = "UserRed",
+		r = "UserBlue",
+		rm = "UserBlue",
+		s = "UserMagenta",
+		S = "UserMagenta",
+		[""] = "FelnMagenta",
+		c = "UserYellow",
+		["!"] = "UserBlue",
+		t = "UserBlue",
+	},
+}
+
+local icons = {
+	locker = "", -- #f023
+	page = "☰", -- 2630
+	line_number = "", -- e0a1
+	connected = "", -- f817
+	dos = "", -- e70f
+	unix = "", -- f17c
+	mac = "", -- f179
+	mathematical_L = "𝑳",
+	vertical_bar = "┃",
+	vertical_bar_thin = "│",
+	left = "",
+	right = "",
+	block = "█",
+	left_filled = "",
+	right_filled = "",
+	slant_left = "",
+	slant_left_thin = "",
+	slant_right = "",
+	slant_right_thin = "",
+	slant_left_2 = "",
+	slant_left_2_thin = "",
+	slant_right_2 = "",
+	slant_right_2_thin = "",
+	left_rounded = "",
+	left_rounded_thin = "",
+	right_rounded = "",
+	right_rounded_thin = "",
+	circle = "●",
+}
+
+---Get the number of diagnostic messages for the provided severity
+---@param str string [ERROR | WARN | INFO | HINT]
+---@return string
+local function get_diag(str)
+	local diagnostics = vim.diagnostic.get(0, {
+		severity = vim.diagnostic.severity[str],
 	})
+	local count = #diagnostics
+
+	return (count > 0) and "" .. count or ""
 end
 
--- insert_right insert given item into galaxyline.right
-local function insert_right(element)
-	table.insert(gls.right, element)
+---Get highlight group from vi mode
+---@return string
+local function vi_mode_hl()
+	return vi.colors[vim.fn.mode()] or "UserSLViBlack"
 end
 
--- insert_blank_line_at_left insert blank line with
--- line_bg color.
-local function insert_blank_line_at_right()
-	insert_right({
-		Space = {
-			provider = function()
-				return " "
-			end,
-			highlight = { colors.bg, colors.line_bg },
-		},
-	})
+---Get sep highlight group from vi mode
+local function vi_sep_hl()
+	return vi.sep[vim.fn.mode()] or "UserSLBlack"
 end
 
------------------------------------------------------
------------------ start insert ----------------------
------------------------------------------------------
-
---{ mode panel start
-insert_left({
-	Start = {
-		provider = function()
-			return " "
-		end,
-		highlight = { colors.bg },
-	},
-})
-
-insert_blank_line_at_left()
-
-insert_left({
-	ViMode = {
-		icon = function()
-			local icons = {
-				n = " ",
-				i = " ",
-				c = "ﲵ ",
-				V = " ",
-				[""] = " ",
-				v = " ",
-				C = "ﲵ ",
-				R = "﯒ ",
-				t = " ",
-			}
-			return icons[vim.fn.mode()]
-		end,
-		provider = function()
-			-- auto change color according the vim mode
-			local alias = {
-				n = "N",
-				i = "I",
-				c = "C",
-				V = "VL",
-				[""] = "V",
-				v = "V",
-				C = "C",
-				["r?"] = ":CONFIRM",
-				rm = "--MORE",
-				R = "R",
-				Rv = "R&V",
-				s = "S",
-				S = "S",
-				["r"] = "HIT-ENTER",
-				[""] = "SELECT",
-				t = "T",
-				["!"] = "SH",
-			}
-			local mode_color = {
-				n = colors.yellow,
-				i = colors.green,
-				v = colors.blue,
-				[""] = colors.blue,
-				V = colors.blue,
-				c = colors.magenta,
-				no = colors.red,
-				s = colors.orange,
-				S = colors.orange,
-				[""] = colors.orange,
-				ic = colors.yellow,
-				R = colors.purple,
-				Rv = colors.purple,
-				cv = colors.red,
-				ce = colors.red,
-				r = colors.cyan,
-				rm = colors.cyan,
-				["r?"] = colors.cyan,
-				["!"] = colors.red,
-				t = colors.red,
-			}
-
-			local vim_mode = vim.fn.mode()
-			vim.api.nvim_command("hi GalaxyViMode guifg=" .. mode_color[vim_mode])
-			return alias[vim_mode]
-		end,
-		highlight = { colors.bg, colors.bg },
-	},
-})
-
-insert_blank_line_at_left()
-
-insert_left({
-	Separa = {
-		provider = function()
-			return " "
-		end,
-		highlight = { colors.bg },
-	},
-})
-
---mode panel end}
-
--- {information panel start
-insert_left({
-	Start = {
-		provider = function()
-			return " "
-		end,
-		highlight = { colors.bg },
-	},
-})
-
-insert_left({
-	FileIcon = {
-		provider = "FileIcon",
-		condition = buffer_not_empty,
-		highlight = { require("galaxyline.provider_fileinfo").get_file_icon_color, colors.bg },
-	},
-})
-
-insert_left({
-	FileName = {
-		provider = function()
-			return vim.fn.expand("%:F")
-		end,
-		condition = function()
-			return buffer_not_empty and has_file_type()
-		end,
-		highlight = { colors.fg, colors.bg },
-	},
-})
-
-insert_blank_line_at_left()
-
-insert_left({
-	GitIcon = {
-		provider = function()
-			return "  "
-		end,
-		condition = require("galaxyline.provider_vcs").check_git_workspace,
-		highlight = { colors.orange, colors.bg },
-	},
-})
-
-insert_left({
-	GitBranch = {
-		provider = "GitBranch",
-		condition = require("galaxyline.provider_vcs").check_git_workspace,
-		highlight = { "#8FBCBB", colors.bg, "bold" },
-	},
-})
-
-insert_blank_line_at_left()
-
-local checkwidth = function()
-	local squeeze_width = vim.fn.winwidth(0) / 2
-	if squeeze_width > 40 then
-		return true
+---Get the path of the file relative to the cwd
+---@return string
+local function file_info()
+	local list = {}
+	if vim.bo.readonly then
+		table.insert(list, "🔒")
 	end
-	return false
+
+	if vim.bo.modified then
+		table.insert(list, "●")
+	end
+
+	table.insert(list, vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":~:."))
+
+	return table.concat(list, " ")
 end
 
-insert_left({
-	DiffAdd = {
-		provider = "DiffAdd",
-		condition = checkwidth,
-		icon = "   ",
-		highlight = { colors.green, colors.bg },
-	},
-})
-
-insert_left({
-	DiffModified = {
-		provider = "DiffModified",
-		condition = checkwidth,
-		icon = "   ",
-		highlight = { colors.orange, colors.bg },
-	},
-})
-
-insert_left({
-	DiffRemove = {
-		provider = "DiffRemove",
-		condition = checkwidth,
-		icon = "   ",
-		highlight = { colors.red, colors.bg },
-	},
-})
-
-insert_left({
-	TrailingWhiteSpace = {
-		provider = TrailingWhiteSpace,
-		icon = "   ",
-		highlight = { colors.yellow, colors.bg },
-	},
-})
-
-insert_left({
-	DiagnosticError = {
-		provider = "DiagnosticError",
-		icon = "   ",
-		highlight = { colors.red, colors.bg },
-	},
-})
-
-insert_left({
-	DiagnosticWarn = {
-		provider = "DiagnosticWarn",
-		icon = "   ",
-		highlight = { colors.yellow, colors.bg },
-	},
-})
-
-insert_left({
-	CocStatus = {
-		provider = CocStatus,
-		highlight = { colors.green, colors.bg },
-		icon = "   ",
-		condition = use_coc,
-	},
-})
-
-insert_left({
-	CocStatus = {
-		provider = "DiagnosticInfo",
-		highlight = { colors.green, colors.bg },
-		icon = "   ",
-		condition = function()
-			return checkwidth() and not use_coc
-		end,
-	},
-})
-
-insert_left({
-	CocFunc = {
-		provider = CocFunc,
-		icon = "  λ ",
-		highlight = { colors.yellow, colors.bg },
-		condition = use_coc,
-	},
-})
-
-insert_left({
-	DiagnosticHint = {
-		provider = "DiagnosticHint",
-		condition = function()
-			return checkwidth() and not use_coc
-		end,
-		highlight = { colors.cyan, colors.bg },
-		icon = "   ",
-	},
-})
-
-insert_left({
-	Separa = {
+-- Create a table that contians every status line commonent
+local c = {
+	vimode = {
 		provider = function()
-			return " "
+			return fmt(" %s ", vi.text[vim.fn.mode()])
 		end,
-		highlight = { colors.bg },
-	},
-})
--- left information panel end}
-
-insert_right({
-	Start = {
-		provider = function()
-			return " "
-		end,
-		highlight = { colors.bg },
-	},
-})
-
-insert_blank_line_at_right()
-
-insert_right({
-	FileFormat = {
-		provider = "FileFormat",
-		condition = checkwidth,
-		highlight = { colors.fg, colors.bg, "bold" },
-	},
-})
-
-insert_blank_line_at_right()
-
-insert_right({
-	LineInfo = {
-		provider = "LineColumn",
-		separator = "",
-		separator_highlight = { colors.green, colors.bg },
-		highlight = { colors.fg, colors.bg },
-		condition = checkwidth,
-	},
-})
-
-insert_right({
-	PerCent = {
-		provider = "LinePercent",
-		separator = "",
-		separator_highlight = { colors.blue, colors.bg },
-		highlight = { colors.cyan, colors.bg, "bold" },
-		condition = checkwidth,
-	},
-})
-
-insert_right({
-	Encode = {
-		provider = "FileEncode",
-		separator = "",
-		separator_highlight = { colors.blue, colors.bg },
-		highlight = { colors.cyan, colors.bg, "bold" },
-		condition = checkwidth,
-	},
-})
-
-insert_blank_line_at_right()
-
-insert_right({
-	Separa = {
-		provider = function()
-			return " "
-		end,
-		highlight = { colors.bg },
-	},
-})
-
-gl.short_line_list = {
-	"LuaTree",
-	"vista",
-	"dbui",
-	"startify",
-	"term",
-	"nerdtree",
-	"fugitive",
-	"fugitiveblame",
-	"plug",
-	"NvimTree",
-	"DiffviewFiles",
-}
-
-require("galaxyline").section.short_line_left = {
-	{
-		ShortLineLeftBufferType = {
-			highlight = { colors.cyan, colors.bg },
-			provider = function()
-				local BufferTypeMap = {
-					["Mundo"] = "Mundo History",
-					["MundoDiff"] = "Mundo Diff",
-					["NvimTree"] = " Tree",
-					["fugitive"] = " Fugitive",
-					["fugitiveblame"] = " Fugitive Blame",
-					["help"] = " Help",
-					["minimap"] = "Minimap",
-					["qf"] = " Quick Fix",
-					["tabman"] = "Tab Manager",
-					["tagbar"] = "Tagbar",
-					["toggleterm"] = "Terminal",
-					["FTerm"] = "Terminal",
-					["NeogitStatus"] = " Neogit Status",
-					["NeogitPopup"] = " Neogit Popup",
-					["NeogitCommitMessage"] = " Neogit Commit",
-					["DiffviewFiles"] = " Diff View",
-				}
-				local name = BufferTypeMap[vim.bo.filetype] or " Editor"
-				return string.format("  %s", name)
-			end,
-			separator = " ",
-			separator_highlight = { colors.bg, colors.line_bg },
+		hl = vi_mode_hl,
+		right_sep = {
+			str = " ",
+			hl = vi_sep_hl,
 		},
 	},
-	{
-		ShortLineLeftWindowNumber = {
-			highlight = { colors.cyan, colors.line_bg },
-			provider = function()
-				return " " .. vim.api.nvim_win_get_number(vim.api.nvim_get_current_win())
+	git = {
+		branch = {
+			provider = "git_branch",
+			icon = " ",
+			hl = "UserSLGitBranch",
+			right_sep = {
+				str = " ",
+				hl = "UserSLGitBranch",
+			},
+			enabled = function()
+				return vim.b.gitsigns_status_dict ~= nil
 			end,
-			separator = "",
-			separator_highlight = { colors.line_bg, colors.dark },
+		},
+		add = {
+			provider = "git_diff_added",
+			icon = icons.circle,
+			hl = "UserSLGitAdd",
+			right_sep = {
+				str = " ",
+				hl = "UserSLGitAdd",
+			},
+		},
+		change = {
+			provider = "git_diff_changed",
+			icon = icons.circle,
+			hl = "UserSLGitChange",
+			right_sep = {
+				str = " ",
+				hl = "UserSLGitBranch",
+			},
+		},
+		remove = {
+			provider = "git_diff_removed",
+			icon = icons.circle,
+			hl = "UserSLGitRemove",
+			right_sep = {
+				str = " ",
+				hl = "UserSLGitBranch",
+			},
+		},
+	},
+	file = {
+		type = {
+			provider = function()
+				return fmt(" %s ", vim.bo.filetype:upper())
+			end,
+			hl = "UserSLAlt",
+		},
+		info = {
+			provider = {
+				name = "file_info",
+				opts = {
+					type = "relative",
+				},
+			},
+			hl = "UserSLAlt",
+			left_sep = {
+				str = " ",
+				hl = "UserSLAltSep",
+			},
+			right_sep = {
+				str = " ",
+				hl = "UserSLAltSep",
+			},
+		},
+		encode = {
+			provider = function()
+				local os = icons[vim.bo.fileformat] or ""
+				return fmt(" %s %s ", os, vim.bo.fileencoding)
+			end,
+			hl = "StatusLine",
+			left_sep = {
+				str = icons.left_filled,
+				hl = "UserSLAltSep",
+			},
+		},
+		winbar = {
+			provider = file_info,
+			hl = "Comment",
+		},
+	},
+	cursor = {
+		position = {
+			provider = function()
+				-- TODO: What about 4+ diget line numbers?
+				return fmt(" %d:%d ", unpack(vim.api.nvim_win_get_cursor(0)))
+			end,
+			hl = vi_mode_hl,
+			left_sep = {
+				str = icons.left_filled,
+				hl = vi_sep_hl,
+			},
+		},
+		percent = {
+			provider = function()
+				return " " .. require("feline.providers.cursor").line_percentage() .. " "
+			end,
+			hl = vi_mode_hl,
+			left_sep = {
+				str = icons.left,
+				hl = vi_mode_hl,
+			},
+		},
+	},
+	default = { -- needed to pass the parent StatusLine hl group to right hand side
+		provider = "",
+		hl = "StatusLine",
+	},
+	lsp = {
+		status = {
+			provider = function()
+				local nv_status, navic = pcall(require, "nvim-navic")
+				if not nv_status or not navic.is_available() then
+					return ""
+				end
+				local location = navic.get_location({
+					depth_limit = 2,
+					depth_imit_indicator = ".",
+				})
+				return "◦ " .. location .. " "
+			end,
+			hl = "UserSLStatus",
+			left_sep = {
+				str = "",
+				hl = "UserSLStatusBg",
+				always_visible = true,
+			},
+			right_sep = {
+				str = "",
+				hl = "UserSLErrorStatus",
+				always_visible = true,
+			},
+		},
+		error = {
+			provider = function()
+				return get_diag("ERROR")
+			end,
+			hl = "UserSLError",
+			right_sep = {
+				str = "",
+				hl = "UserSLWarnError",
+				always_visible = true,
+			},
+		},
+		warn = {
+			provider = function()
+				return get_diag("WARN")
+			end,
+			hl = "UserSLWarn",
+			right_sep = {
+				str = "",
+				hl = "UserSLInfoWarn",
+				always_visible = true,
+			},
+		},
+		info = {
+			provider = function()
+				return get_diag("INFO")
+			end,
+			hl = "UserSLInfo",
+			right_sep = {
+				str = "",
+				hl = "UserSLHintInfo",
+				always_visible = true,
+			},
+		},
+		hint = {
+			provider = function()
+				return get_diag("HINT")
+			end,
+			hl = "UserSLHint",
+			right_sep = {
+				str = "",
+				hl = "UserSLFtHint",
+				always_visible = true,
+			},
+		},
+	},
+	inactive = {
+		fileinfo = {
+			provider = "file_info",
+			hl = "StatusLine",
+		},
+		position = {
+			provider = "position",
+			hl = "StatusLine",
 		},
 	},
 }
+
+local active = {
+	{ -- left
+		c.vimode,
+		c.git.branch,
+		c.git.add,
+		c.git.change,
+		c.git.remove,
+		c.file.info,
+		c.default, -- must be last
+	},
+	{ -- right
+		c.lsp.status,
+		c.lsp.error,
+		c.lsp.warn,
+		c.lsp.info,
+		c.lsp.hint,
+		c.file.type,
+		c.file.encode,
+		c.cursor.position,
+		c.cursor.percent,
+	},
+}
+
+local inactive = {
+	{ c.inactive.fileinfo }, -- left
+	{ c.inactive.position }, -- right
+}
+
+feline.setup({
+	components = {
+		active = active,
+		inactive = inactive,
+	},
+	highlight_reset_triggers = {},
+	force_inactive = {
+		filetypes = {
+			"NvimTree",
+			"packer",
+			"dap-repl",
+			"dapui_scopes",
+			"dapui_stacks",
+			"dapui_watches",
+			"dapui_repl",
+			"LspTrouble",
+			"qf",
+			"help",
+		},
+		buftypes = { "terminal" },
+		bufnames = {},
+	},
+	disable = {
+		filetypes = { "dashboard", "startify" },
+	},
+})

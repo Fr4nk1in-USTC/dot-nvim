@@ -31,13 +31,14 @@ return packer.startup(function(use)
 	use("kyazdani42/nvim-tree.lua")
 
 	-- Statusline
-	use("glepnir/galaxyline.nvim")
+	use("feline-nvim/feline.nvim")
 
 	-- Bufferline
 	use("romgrk/barbar.nvim")
 
 	-- LSP Config
 	use("neovim/nvim-lspconfig")
+	use("nvim-lua/lsp-status.nvim")
 	use("hrsh7th/nvim-cmp") -- Autocompletion plugin
 	use("hrsh7th/cmp-path") -- Path completion plugin
 	use("hrsh7th/cmp-nvim-lsp") -- LSP source for nvim-cmp
@@ -53,6 +54,7 @@ return packer.startup(function(use)
 	})
 	use("https://git.sr.ht/~whynothugo/lsp_lines.nvim")
 	use("ray-x/lsp_signature.nvim")
+	use("SmiteshP/nvim-navic")
 
 	-- Debugger Adapter
 	use("mfussenegger/nvim-dap")

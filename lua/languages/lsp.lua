@@ -157,6 +157,11 @@ local on_attach = function(client, bufnr)
 
 	signature_mapping(bufnr)
 
+	local navic_status, navic = pcall(require, "nvim-navic")
+	if navic_status then
+		navic.attach(client, bufnr)
+	end
+
 	client.resolved_capabilities.document_formatting = false
 end
 
