@@ -39,6 +39,6 @@ null_ls.setup({
 	end,
 })
 
-local map = require("mappings").map
+local map = require("helper.mapping").map
 
 map("n", "<A-f>", vim.lsp.buf.formatting, nil, "Format document")

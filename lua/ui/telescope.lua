@@ -20,7 +20,7 @@ end
 require("telescope").setup(config)
 
 -- Keymapping
-local map = require("mappings").map
+local map = require("helper.mapping").map
 
 map("n", "<leader>ft", ":Telescope<CR>", nil, "Open Telescope")
 map("n", "<leader>ff", ":Telescope find_files<CR>", nil, "Open Telescope find_files")

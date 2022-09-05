@@ -18,7 +18,7 @@ runner.setup({
 	},
 })
 
-local map = require("mappings").map
+local map = require("helper.mapping").map
 
 map("n", "<leader>rc", ":RunCode<CR>", nil, "Run file or project")
 map("n", "<leader>rf", ":RunFile<CR>", nil, "Run file")

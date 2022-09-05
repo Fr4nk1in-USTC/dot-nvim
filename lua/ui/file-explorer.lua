@@ -29,5 +29,5 @@ tree.setup({
 	},
 })
 
-local map = require("mappings").map
+local map = require("helper.mapping").map
 map("n", "<leader>nt", ":NvimTreeToggle<CR>", nil, "Toggle NvimTree")

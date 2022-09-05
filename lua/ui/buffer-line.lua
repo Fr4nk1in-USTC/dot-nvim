@@ -26,7 +26,7 @@ bufferline.setup({
 	icon_close_tab = "",
 })
 
-local map = require("mappings").map
+local map = require("helper.mapping").map
 -- Move to previous/next
 map("n", "<A-,>", "<Cmd>BufferPrevious<CR>", nil, "Go to previous buffer")
 map("n", "<A-.>", "<Cmd>BufferNext<CR>", nil, "Go to next buffer")

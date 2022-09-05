@@ -1,5 +1,5 @@
 local g = vim.g
-local map = require("mappings").map
+local map = require("helper.mapping").map
 
 -- markdown-preview.nvim
 g.mkdp_auto_start = 0

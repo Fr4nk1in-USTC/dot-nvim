@@ -5,7 +5,7 @@ if not status then
 end
 
 -- Keymapping
-local map = require("mappings").map
+local map = require("helper.mapping").map
 local opts = { silent = true }
 
 map({ "n", "i", "v" }, "<F5>", function()

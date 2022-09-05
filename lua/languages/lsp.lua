@@ -6,7 +6,7 @@ if not status then
 end
 
 -- import my own mapping function
-local map = require("mappings").map
+local map = require("helper.mapping").map
 
 -- diagnostic appearence
 vim.diagnostic.config({
