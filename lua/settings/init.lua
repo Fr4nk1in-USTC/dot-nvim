@@ -31,7 +31,7 @@ set.mouse = "a"
 set.clipboard:append("unnamedplus")
 set.whichwrap = "<,>,h,l,[,]"
 
-set.conceallevel = 2
+set.conceallevel = 0
 
 -- go to last loc when opening a buffer
 api.nvim_create_autocmd(
