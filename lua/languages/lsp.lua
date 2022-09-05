@@ -35,6 +35,19 @@ local saga_status, saga = pcall(require, "lspsaga")
 
 local saga_mapping
 if saga_status then
+	saga.init_lsp_saga({
+		show_outline = {
+			win_position = "left",
+			win_with = "NvimTree",
+			auto_preview = false,
+			jump_key = "<CR>",
+			auto_refresh = true,
+		},
+	})
+
+	-- Outline
+	map("n", "<leader>o", "<cmd>LSoutlineToggle<CR>", nil, "Toggle LSP Outline")
+
 	saga_mapping = function(bufnr)
 		local bufopts = {
 			noremap = true,
@@ -76,9 +89,6 @@ if saga_status then
 		map("n", "]E", function()
 			require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
 		end, bufopts, "Goto next error")
-
-		-- Outline
-		map("n", "<leader>o", "<cmd>LSoutlineToggle<CR>", bufopts, "Toggle LSP Outline")
 	end
 else
 	-- if lspsaga is not installed, use lsp native commands
