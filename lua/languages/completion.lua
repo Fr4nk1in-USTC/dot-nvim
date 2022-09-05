@@ -12,9 +12,6 @@ end
 if pcall(require, "cmp_nvim_lsp") then
 	table.insert(cmp_sources, { name = "nvim_lsp" })
 end
-if pcall(require, "cmp_omni") then
-	table.insert(cmp_sources, { name = "omni" })
-end
 
 -- luasnip & its setup
 local luasnip_status, luasnip = pcall(require, "luasnip")

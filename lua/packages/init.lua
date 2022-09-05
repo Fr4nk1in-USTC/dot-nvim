@@ -91,9 +91,6 @@ return packer.startup(function(use)
 	use("godlygeek/tabular")
 	use("preservim/vim-markdown")
 
-	-- LaTeX Support
-	use("lervag/vimtex")
-
 	-- Notify
 	use("rcarriga/nvim-notify")
 

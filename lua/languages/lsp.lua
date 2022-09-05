@@ -235,20 +235,32 @@ mason_lspconfig.setup_handlers({
 			capabilities = clangd_capabilities,
 		})
 	end,
-	["ltex"] = function()
-		require("lspconfig").ltex.setup({
+	["texlab"] = function()
+		require("lspconfig").texlab.setup({
 			on_attach = on_attach,
 			capabilities = capabilities,
-			filetypes = { "tex", "bib" },
+			filetypes = { "tex", "plaintex", "bib" },
 			settings = {
-				ltex = {
-					enabled = {
-						"latex",
-						"tex",
-						"bib",
+				texlab = {
+					build = {
+						executable = "xelatex",
+						args = {
+							"-synctex=1",
+							"-interaction=nonstopmode",
+							"%f",
+						},
+						onSave = true,
+						forwardSearchAfter = true,
 					},
-					checkFrequency = "save",
-					completionEnabled = false,
+					forwardSearch = {
+						executable = "zathura",
+						args = { "--synctex-forward", "%l:1:%f", "%p" },
+						onSave = true,
+					},
+					chktex = {
+						onOpenAndSave = true,
+						onEdit = true,
+					},
 				},
 			},
 		})
