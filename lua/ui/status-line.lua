@@ -576,7 +576,10 @@ local c = {
 					depth_limit = 2,
 					depth_imit_indicator = ".",
 				})
-				return "◦ " .. location .. " "
+				if location == "" then
+					return ""
+				end
+				return " ◦ " .. location .. " "
 			end,
 			hl = "UserSLStatus",
 			left_sep = {
