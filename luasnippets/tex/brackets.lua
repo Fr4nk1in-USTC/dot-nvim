@@ -3,12 +3,20 @@ local snips, autosnips = {}, {}
 local tex = require("helper.latex")
 
 autosnips = {
-	s({ trig = "(", name = "( and )", priority = 500 }, { t("("), i(1), t(")") }),
-	s({ trig = "[", name = "[ and ]", priority = 500 }, { t("["), i(1), t("]") }),
-	s({ trig = "{", name = "{ and }", priority = 500 }, { t("{"), i(1), t("}") }),
-	s({ trig = "\\{", name = "\\{ and \\}", priority = 500 }, { t("\\{"), i(1), t("\\}") }),
-	s({ trig = "`", name = "` and '", priority = 500 }, { t("`"), i(1), t("'") }, { condition = tex.in_text }),
-	s({ trig = "$", name = "$ and $", priority = 500 }, { t("$"), i(1), t("$") }, { condition = tex.in_text }),
+	s({ trig = "(", name = "( and )", priority = 500, wordTrig = false }, { t("("), i(1), t(")") }),
+	s({ trig = "[", name = "[ and ]", priority = 500, wordTrig = false }, { t("["), i(1), t("]") }),
+	s({ trig = "{", name = "{ and }", priority = 500, wordTrig = false }, { t("{"), i(1), t("}") }),
+	s({ trig = "\\{", name = "\\{ and \\}", priority = 500, wordTrig = false }, { t("\\{"), i(1), t("\\}") }),
+	s(
+		{ trig = "`", name = "` and '", priority = 500, wordTrig = false },
+		{ t("`"), i(1), t("'") },
+		{ condition = tex.in_text }
+	),
+	s(
+		{ trig = "$", name = "$ and $", priority = 500, wordTrig = false },
+		{ t("$"), i(1), t("$") },
+		{ condition = tex.in_text }
+	),
 	s(
 		{ trig = "\\(", name = "\\( and \\)", priority = 750 },
 		{ t("\\("), i(1), t("\\)") },

@@ -194,6 +194,74 @@ autosnips = {
 	}, {
 		condition = tex.in_mathzone,
 	}),
+	-- Fractions
+	s({
+		trig = "\\?frac",
+		name = "fraction",
+		regTrig = true,
+		priority = 500,
+	}, {
+		c(1, {
+			sn(nil, { t("\\frac{ "), i(1), t(" }{ "), i(2), t(" }") }),
+			sn(nil, { t("\\dfrac{ "), i(1), t(" }{ "), i(2), t(" }") }),
+		}),
+	}, {
+		condition = tex.in_mathzone,
+	}),
+	s({
+		trig = "\\?dfrac",
+		name = "display fraction",
+		regTrig = true,
+	}, {
+		t("\\dfrac{ "),
+		i(1),
+		t(" }{ "),
+		i(2),
+		t(" }"),
+	}, {
+		condition = tex.in_mathzone,
+	}),
+	s({
+		trig = "//",
+		name = "fraction",
+	}, {
+		c(1, {
+			sn(nil, { t("\\frac{ "), i(1), t(" }{ "), i(2), t(" }") }),
+			sn(nil, { t("\\dfrac{ "), i(1), t(" }{ "), i(2), t(" }") }),
+		}),
+	}, {
+		condition = tex.in_mathzone,
+	}),
+	s({
+		trig = "([\\%w{}%_%^]+)/",
+		name = "fraction",
+		regTrig = true,
+	}, {
+		t("\\frac{ "),
+		f(function(_, snip)
+			return snip.captures[1]
+		end, {}),
+		t(" }{ "),
+		i(1),
+		t(" }"),
+	}, {
+		condition = tex.in_mathzone,
+	}),
+	s({
+		trig = "%((.*)%)/",
+		name = "fraction",
+		regTrig = true,
+	}, {
+		t("\\frac{ "),
+		f(function(_, snip)
+			return snip.captures[1]
+		end, {}),
+		t(" }{ "),
+		i(1),
+		t(" }"),
+	}, {
+		condition = tex.in_mathzone,
+	}),
 }
 
 return snips, autosnips
