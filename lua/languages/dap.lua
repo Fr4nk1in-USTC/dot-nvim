@@ -8,15 +8,6 @@ end
 local map = require("helper.mapping").map
 local opts = { silent = true }
 
-map({ "n", "i", "v" }, "<F5>", function()
-	dapui.open()
-	return dap.continue()
-end, opts, "Continue or start debugging")
-map({ "n", "i", "v" }, "<F6>", function()
-	dapui.close()
-	dap.repl.close()
-	return dap.terminate()
-end, opts, "Terminate debugging")
 map({ "n", "i", "v" }, "<F10>", dap.step_over, opts, "Step over")
 map({ "n", "i", "v" }, "<F11>", dap.step_into, opts, "Step into")
 map({ "n", "i", "v" }, "<F12>", dap.step_out, opts, "Step out")
@@ -100,6 +91,21 @@ if ui_status then
 			toggle = "<C-t>",
 		},
 	})
+	map({ "n", "i", "v" }, "<F5>", function()
+		dapui.open()
+		return dap.continue()
+	end, opts, "Continue or start debugging")
+	map({ "n", "i", "v" }, "<F6>", function()
+		dapui.close()
+		dap.repl.close()
+		return dap.terminate()
+	end, opts, "Terminate debugging")
+else
+	map({ "n", "i", "v" }, "<F5>", dap.continue, opts, "Continue or start debugging")
+	map({ "n", "i", "v" }, "<F6>", function()
+		dap.repl.close()
+		return dap.terminate()
+	end, opts, "Terminate debugging")
 end
 
 -- DAP Virtual Text
