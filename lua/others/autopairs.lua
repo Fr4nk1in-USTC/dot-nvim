@@ -3,4 +3,6 @@ if not status then
 	return
 end
 
-autopairs.setup()
+autopairs.setup({
+	disable_filetype = { "tex" },
+})
