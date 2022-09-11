@@ -1,6 +1,6 @@
 local status, _ = pcall(require, "nightfox")
 if not status then
-	return
+    return
 end
 
 -- setup must be called before loading

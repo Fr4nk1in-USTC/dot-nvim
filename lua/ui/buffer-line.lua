@@ -1,29 +1,29 @@
 local status, bufferline = pcall(require, "bufferline")
 if not status then
-	return
+    return
 end
 
 bufferline.setup({
-	-- Enable/disable animations
-	animation = true,
+    -- Enable/disable animations
+    animation = true,
 
-	-- Enable/disable auto-hiding the tab bar when there is a single buffer
-	auto_hide = false,
+    -- Enable/disable auto-hiding the tab bar when there is a single buffer
+    auto_hide = false,
 
-	-- Enable/disable current/total tabpages indicator (top right corner)
-	tabpages = true,
+    -- Enable/disable current/total tabpages indicator (top right corner)
+    tabpages = true,
 
-	-- Enable/disable close button
-	closable = true,
+    -- Enable/disable close button
+    closable = true,
 
-	-- Enables/disable clickable tabs
-	--  - left-click: go to buffer
-	--  - middle-click: delete buffer
-	clickable = true,
-	-- Configure icons on the bufferline.
-	icon_separator_active = "",
-	icon_separator_inactive = "",
-	icon_close_tab = "",
+    -- Enables/disable clickable tabs
+    --  - left-click: go to buffer
+    --  - middle-click: delete buffer
+    clickable = true,
+    -- Configure icons on the bufferline.
+    icon_separator_active = "",
+    icon_separator_inactive = "",
+    icon_close_tab = "",
 })
 
 local map = require("helper.mapping").map
@@ -69,19 +69,19 @@ map("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", nil, "Sort buffers b
 -- :BarbarDisable - very bad command, should never be used
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
-	pattern = "*",
-	callback = function()
-		if vim.bo.filetype == "NvimTree" then
-			require("bufferline.state").set_offset(31, "NvimTree")
-		end
-	end,
+    pattern = "*",
+    callback = function()
+        if vim.bo.filetype == "NvimTree" then
+            require("bufferline.state").set_offset(31, "NvimTree")
+        end
+    end,
 })
 
 vim.api.nvim_create_autocmd("BufWinLeave", {
-	pattern = "*",
-	callback = function()
-		if vim.fn.expand("<afile>"):match("NvimTree") then
-			require("bufferline.state").set_offset(0)
-		end
-	end,
+    pattern = "*",
+    callback = function()
+        if vim.fn.expand("<afile>"):match("NvimTree") then
+            require("bufferline.state").set_offset(0)
+        end
+    end,
 })

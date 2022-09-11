@@ -1,14 +1,14 @@
 local mappings = {}
 -- Options
 mappings.default_opts = {
-	noremap = true,
-	silent = true,
+    noremap = true,
+    silent = true,
 }
 mappings.noremap_only_opts = {
-	noremap = true,
+    noremap = true,
 }
 mappings.silent_only_opts = {
-	silent = true,
+    silent = true,
 }
 
 -- @brief Keymap Function
@@ -34,13 +34,13 @@ mappings.silent_only_opts = {
 -- mappings.map({"n", "v"}, "key", require("my_command").func, { silent = true }, "description")
 -- ```
 mappings.map = function(mode, lhs, rhs, opts, desc)
-	mode = mode or "n"
-	opts = opts or mappings.default_opts
-	desc = desc or ""
+    mode = mode or "n"
+    opts = opts or mappings.default_opts
+    desc = desc or ""
 
-	opts.desc = desc
+    opts.desc = desc
 
-	vim.keymap.set(mode, lhs, rhs, opts)
+    vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 return mappings

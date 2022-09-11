@@ -1,8 +1,8 @@
 local status, hologram = pcall(require, "hologram")
 if not status then
-	return
+    return
 end
 
 hologram.setup({
-	auto_display = true, -- WIP automatic markdown image display, may be prone to breaking
+    auto_display = true, -- WIP automatic markdown image display, may be prone to breaking
 })

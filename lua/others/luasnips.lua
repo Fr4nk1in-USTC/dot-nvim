@@ -1,20 +1,20 @@
 local status, luasnip = pcall(require, "luasnip")
 if not status then
-	return
+    return
 end
 
 local types = require("luasnip.util.types")
 luasnip.config.setup({
-	update_events = "TextChanged,TextChangedI",
-	enable_autosnippets = true,
-	ext_opts = {
-		[types.choiceNode] = {
-			active = {
-				virt_text = { { "<- Choice Here (Prev: <C-,>, Next: <C-.>)", "SpecialComment" } },
-			},
-		},
-	},
-	store_selection_keys = "<Tab>",
+    update_events = "TextChanged,TextChangedI",
+    enable_autosnippets = true,
+    ext_opts = {
+        [types.choiceNode] = {
+            active = {
+                virt_text = { { "<- Choice Here (Prev: <C-,>, Next: <C-.>)", "SpecialComment" } },
+            },
+        },
+    },
+    store_selection_keys = "<Tab>",
 })
 
 require("luasnip.loaders.from_lua").lazy_load()

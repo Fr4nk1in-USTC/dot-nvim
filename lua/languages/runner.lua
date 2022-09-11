@@ -1,21 +1,21 @@
 local status, runner = pcall(require, "code_runner")
 if not status then
-	return
+    return
 end
 
 runner.setup({
-	-- put here the commands by filetype
-	filetype = {
-		python = "python3 -u '$dir/$fileName'",
-		c = "cd '$dir' && gcc -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
-		cpp = "cd '$dir' && g++ -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
-		sh = "$dir/$fileName",
-	},
-	startinsert = true,
-	mode = "float",
-	float = {
-		border = "rounded",
-	},
+    -- put here the commands by filetype
+    filetype = {
+        python = "python3 -u '$dir/$fileName'",
+        c = "cd '$dir' && gcc -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
+        cpp = "cd '$dir' && g++ -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
+        sh = "$dir/$fileName",
+    },
+    startinsert = true,
+    mode = "float",
+    float = {
+        border = "rounded",
+    },
 })
 
 local map = require("helper.mapping").map
