@@ -35,7 +35,7 @@ autosnips = {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " sr",
+        trig = "sr",
         name = "square",
     }, {
         t({ "^{2}" }),
@@ -43,7 +43,7 @@ autosnips = {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " cb",
+        trig = "cb",
         name = "cubic",
     }, {
         t({ "^{3}" }),
@@ -51,7 +51,7 @@ autosnips = {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " invs",
+        trig = "invs",
         name = "inverse",
     }, {
         t("^{-1}"),
@@ -59,7 +59,7 @@ autosnips = {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " rd",
+        trig = "rd",
         name = "power",
     }, {
         t({ "^{" }),
@@ -108,10 +108,14 @@ autosnips = {
     }),
     -- exponents
     s({
-        trig = " exp",
+        trig = "([^\\])exp",
         name = "natural exponent",
+        regTrig = true,
     }, {
-        t({ " \\mathrm{e}^{" }),
+        f(function(_, snip)
+            return snip.captures[1]
+        end, {}),
+        t({ "\\mathrm{e}^{" }),
         i(1),
         t({ "}" }),
     }, {
@@ -119,50 +123,50 @@ autosnips = {
     }),
     -- math styles
     s({
-        trig = " rm",
+        trig = "rm",
         name = "mathrm",
     }, {
-        t({ " \\mathrm{" }),
+        t({ "\\mathrm{" }),
         i(1),
         t({ "}" }),
     }, {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " bf",
+        trig = "bf",
         name = "mathbf",
     }, {
-        t({ " \\mathbf{" }),
+        t({ "\\mathbf{" }),
         i(1),
         t({ "}" }),
     }, {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " bs",
+        trig = "bs",
         name = "boldsymbol",
     }, {
-        t({ " \\boldsymbol{" }),
+        t({ "\\boldsymbol{" }),
         i(1),
         t({ "}" }),
     }, {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " mcal",
+        trig = "mcal",
         name = "mathcal",
     }, {
-        t({ " \\mathcal{" }),
+        t({ "\\mathcal{" }),
         i(1),
         t({ "}" }),
     }, {
         condition = tex.in_mathzone,
     }),
     s({
-        trig = " mbb",
+        trig = "mbb",
         name = "mathbb",
     }, {
-        t({ " \\mathbb{" }),
+        t({ "\\mathbb{" }),
         i(1),
         t({ "}" }),
     }, {

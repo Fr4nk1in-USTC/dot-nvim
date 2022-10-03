@@ -6,7 +6,7 @@ autosnips = {
     s({ trig = "(", name = "( and )", priority = 500, wordTrig = false }, { t("("), i(1), t(")") }),
     s({ trig = "[", name = "[ and ]", priority = 500, wordTrig = false }, { t("["), i(1), t("]") }),
     s({ trig = "{", name = "{ and }", priority = 500, wordTrig = false }, { t("{"), i(1), t("}") }),
-    s({ trig = "\\{", name = "\\{ and \\}", priority = 500, wordTrig = false }, { t("\\{"), i(1), t("\\}") }),
+    s({ trig = "\\{", name = "\\{ and \\}", wordTrig = false }, { t("\\{"), i(1), t("\\}") }),
     s(
         { trig = "`", name = "` and '", priority = 500, wordTrig = false },
         { t("`"), i(1), t("'") },
@@ -39,7 +39,12 @@ autosnips = {
         { condition = tex.in_mathzone }
     ),
     s(
-        { trig = "lr{}", name = "left\\{ and right\\}" },
+        { trig = "lr\\|", name = "left|| and right||" },
+        { t({ "\\left\\| " }), i(1), t({ "\\right\\|" }) },
+        { condition = tex.in_mathzone }
+    ),
+    s(
+        { trig = "lr{", name = "left\\{ and right\\}" },
         { t({ "\\left\\{ " }), i(1), t({ "\\right\\}" }) },
         { condition = tex.in_mathzone }
     ),
@@ -49,7 +54,7 @@ autosnips = {
         { condition = tex.in_mathzone }
     ),
     s(
-        { trig = "lr[]", name = "left[ and right]" },
+        { trig = "lr[", name = "left[ and right]" },
         { t({ "\\left[ " }), i(1), t({ "\\right]" }) },
         { condition = tex.in_mathzone }
     ),

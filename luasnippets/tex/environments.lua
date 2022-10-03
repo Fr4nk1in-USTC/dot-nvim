@@ -23,6 +23,9 @@ local function gen_env_snip(env)
         t({ "", "\\end{" .. env .. "}" }),
     }, {
         condition = conds.line_begin,
+        show_condition = function()
+            return false
+        end,
     })
 end
 
@@ -40,6 +43,9 @@ local function gen_env_snip_with_label(env, tagname)
         t({ "", "\\end{" .. env .. "}" }),
     }, {
         condition = conds.line_begin,
+        show_condition = function()
+            return false
+        end,
     })
 end
 
@@ -64,7 +70,6 @@ local envs = {
     "enumerate",
     "description",
     "tikzpicture",
-    "lstlisting",
 }
 
 local envs_with_label = {
@@ -98,6 +103,9 @@ snips = {
         t({ "}", "\\end{figure}" }),
     }, {
         condition = pipe({ conds.line_begin, tex.in_text }),
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "\\table",
@@ -115,6 +123,9 @@ snips = {
         t({ "", "\\end{table}" }),
     }, {
         condition = pipe({ conds.line_begin, tex.in_text }),
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "\\tabular",
@@ -128,6 +139,45 @@ snips = {
         t({ "", "\\end{tabular}" }),
     }, {
         condition = pipe({ conds.line_begin, tex.in_text }),
+        show_condition = function()
+            return false
+        end,
+    }),
+    s({
+        trig = "\\lstlisting",
+        name = "Lstlisting Environment",
+        docstring = "\\begin{lstlisting}[\n\tcaption={#1},\n\tlabel={lst:#2},\n\tlanguage={#3|C}]\n#4\\end{lstlisting}",
+    }, {
+        t({ "\\begin{lstlisting}[", "\tcaption={" }),
+        i(1),
+        t({ "},", "\tlabel={lst:" }),
+        i(2),
+        t({ "},", "\tlanguage={" }),
+        i(3, "C"),
+        t({ "}]", "" }),
+        i(4),
+        t({ "\\end{lstlisting}" }),
+    }, {
+        condition = pipe({ conds.line_begin, tex.in_text }),
+        show_condition = function()
+            return false
+        end,
+    }),
+    s({
+        trig = "\\prosol",
+        name = "Problem and Solution Environment",
+        docstring = "\\begin{problem}\n\t#1\n\\end{problem}\n\\begin{solution}\n\t#2\n\\end{solution}",
+    }, {
+        t({ "\\begin{problem}", "\t" }),
+        i(1),
+        t({ "", "\\end{problem}", "\\begin{solution}", "\t" }),
+        i(2),
+        t({ "", "\\end{solution}", "" }),
+    }, {
+        condition = pipe({ conds.line_begin, tex.in_text }),
+        show_condition = function()
+            return false
+        end,
     }),
 }
 
@@ -143,7 +193,7 @@ autosnips = {
     s({ trig = "upkg", name = "usepackage" }, { t("\\usepackage{"), i(1), t("}") }, { condition = conds.line_begin }),
     s(
         { trig = "beg", name = "begin{} end{}" },
-        { t({ "\\begin{" }), i(1), t({ "}", "\t" }), i(0), t({ "", "\\end{" }), rep(1), t({ "}" }) },
+        { t({ "\\begin{" }), i(1), t({ "}", "\t" }), i(2), t({ "", "\\end{" }), rep(1), t({ "}" }) },
         { condition = conds.line_begin }
     ),
     s(

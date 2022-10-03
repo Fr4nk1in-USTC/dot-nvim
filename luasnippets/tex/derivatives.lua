@@ -4,7 +4,7 @@ local tex = require("helper.latex")
 
 snips = {
     s({
-        trig = "d",
+        trig = "de",
         name = "Differential",
         dscr = "Insert a differential",
         docstring = "\\mathrm{d} {#1|x}",
@@ -13,7 +13,9 @@ snips = {
         i(1, "x"),
     }, {
         condition = tex.in_mathzone,
-        show_condition = tex.in_mathzone,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "de(%a)(%a)",
@@ -27,7 +29,9 @@ snips = {
         end, {}),
     }, {
         condition = tex.in_mathzone,
-        show_condition = false,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "de(%a)(%a)(%a)",
@@ -47,7 +51,9 @@ snips = {
         end, {}),
     }, {
         condition = tex.in_mathzone,
-        show_condition = false,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "de(%a)(%a)(%d)",
@@ -69,10 +75,12 @@ snips = {
         end, {}),
     }, {
         condition = tex.in_mathzone,
-        show_condition = false,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
-        trig = "p",
+        trig = "pa",
         name = "Partial Differential",
         dscr = "Insert a partial differential",
         docstring = "\\partial {#1|x}",
@@ -81,7 +89,9 @@ snips = {
         i(1, "x"),
     }, {
         condition = tex.in_mathzone,
-        show_condition = tex.in_mathzone,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "pa(%a)(%a)",
@@ -95,7 +105,9 @@ snips = {
         end, {}),
     }, {
         condition = tex.in_mathzone,
-        show_condition = false,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "pa(%a)(%a)(%a)",
@@ -115,7 +127,9 @@ snips = {
         end, {}),
     }, {
         condition = tex.in_mathzone,
-        show_condition = false,
+        show_condition = function()
+            return false
+        end,
     }),
     s({
         trig = "pa(%a)(%a)(%d)",
@@ -137,7 +151,9 @@ snips = {
         end, {}),
     }, {
         condition = tex.in_mathzone,
-        show_condition = false,
+        show_condition = function()
+            return false
+        end,
     }),
 }
 

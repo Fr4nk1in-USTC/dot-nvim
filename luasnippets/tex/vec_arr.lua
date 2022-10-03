@@ -120,7 +120,7 @@ snips = {
         end,
     }),
     s({
-        trig = "arr{",
+        trig = "arrb",
         name = "array",
         dscr = "An array of numbers, index increasing, separated by commas, surrounded by left\\{ and right\\}",
         docstring = "\\left\\{#1_{1}, #1_{2}, \\ldots, #1_{#2|n}\\right\\}",
