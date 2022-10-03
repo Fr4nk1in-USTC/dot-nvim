@@ -43,6 +43,9 @@ if saga_status then
             jump_key = "<CR>",
             auto_refresh = true,
         },
+        symbol_in_winbar = {
+            enable = false,
+        }
     })
 
     -- Outline

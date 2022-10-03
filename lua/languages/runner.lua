@@ -7,8 +7,8 @@ runner.setup({
     -- put here the commands by filetype
     filetype = {
         python = "python3 -u '$dir/$fileName'",
-        c = "cd '$dir' && gcc -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
-        cpp = "cd '$dir' && g++ -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
+        c = "cd '$dir' && clang -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
+        cpp = "cd '$dir' && clang++ -O2 -Wall -o '$fileNameWithoutExt' '$fileName' && '$dir/$fileNameWithoutExt'",
         sh = "$dir/$fileName",
     },
     startinsert = true,

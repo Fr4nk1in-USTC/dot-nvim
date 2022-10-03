@@ -3,6 +3,10 @@ if not status then
     return
 end
 
+notify.setup({
+    background_colour = "#000000",
+})
+
 vim.notify = notify
 
 -- Utility functions shared between progress reports for LSP and DAP
