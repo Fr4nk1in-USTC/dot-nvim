@@ -29,5 +29,5 @@ toggleterm.setup({
 
 local map = require("helper.mapping").map
 
-map("n", "<C-v>", ":ToggleTerm direction=vertical<CR>", nil, "Open vertical ToggleTerm")
-map("n", "<C-h>", ":ToggleTerm direction=horizontal<CR>", nil, "Open horizontal ToggleTerm")
+-- map("n", "<C-v>", ":ToggleTerm direction=vertical<CR>", nil, "Open vertical ToggleTerm")
+-- map("n", "<C-h>", ":ToggleTerm direction=horizontal<CR>", nil, "Open horizontal ToggleTerm")

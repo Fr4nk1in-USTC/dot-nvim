@@ -28,6 +28,8 @@ set.hidden = true
 
 set.mouse = "a"
 
+set.fileencodings = { "ucs-bom", "utf-8", "GB18030", "gbk" }
+
 set.clipboard:append("unnamedplus")
 set.whichwrap = "<,>,h,l,[,]"
 

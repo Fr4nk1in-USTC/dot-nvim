@@ -126,4 +126,13 @@ return packer.startup(function(use)
     -- Git
     use("kdheepak/lazygit.nvim")
     use("lewis6991/gitsigns.nvim")
+
+    -- Indent Line
+    use("lukas-reineke/indent-blankline.nvim")
+
+    -- Leap
+    use("ggandor/leap.nvim")
+
+    -- Zen Mode
+    use("folke/zen-mode.nvim")
 end)

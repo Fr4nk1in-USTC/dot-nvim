@@ -23,6 +23,7 @@ local function toggle_diagnostic()
         update_in_insert = not current,
     })
 end
+
 ---- Diagnostic hints
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
@@ -45,7 +46,7 @@ if saga_status then
         },
         symbol_in_winbar = {
             enable = false,
-        }
+        },
     })
 
     -- Outline
@@ -79,7 +80,7 @@ if saga_status then
         map("n", "gr", "<cmd>Lspsaga rename<CR>", bufopts, "Rename symbol")
 
         -- preview definition
-        map("n", "gpd", "<cmd>Lspsaga preview_definition<CR>", bufopts, "Preview definition")
+        map("n", "gpd", "<cmd>Lspsaga peek_definition<CR>", bufopts, "Preview definition")
 
         -- diagnostics
         map("n", "<leader>d", "<cmd>Lspsaga show_line_diagnostics<CR>", bufopts, "Show line diagnostics")
@@ -175,7 +176,7 @@ local on_attach = function(client, bufnr)
         navic.attach(client, bufnr)
     end
 
-    client.resolved_capabilities.document_formatting = false
+    client.server_capabilities.documentFormattingProvider = false
 end
 
 -- mason configuration
@@ -184,7 +185,7 @@ if not mason_status then
     return
 end
 -- mason installer
-require("mason").setup({
+mason.setup({
     ui = {
         border = "rounded",
         icons = {
@@ -203,21 +204,24 @@ end
 -- ensured install some lsp
 mason_lspconfig.setup({
     ensure_installed = {
-        "bash-language-server",
-        "lua-language-server",
-        "vim-language-server",
-        "json-lsp",
+        "bashls",
+        "sumneko_lua",
+        "vimls",
+        "jsonls",
         "pyright",
         "clangd",
+        "texlab",
     },
     automatic_installation = true,
 })
 
 -- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
 local cmp_status, cmp = pcall(require, "cmp_nvim_lsp")
+local capabilities
 if cmp_status then
-    capabilities = cmp.update_capabilities(capabilities)
+    capabilities = cmp.default_capabilities()
+else
+    capabilities = vim.lsp.protocol.make_client_capabilities()
 end
 
 -- Clangd specific capabilities
@@ -241,7 +245,7 @@ mason_lspconfig.setup_handlers({
     ["texlab"] = function()
         require("lspconfig").texlab.setup({
             on_attach = on_attach,
-            capabilities = capabilities,
+            capabilities = vim.lsp.protocol.make_client_capabilities(),
             filetypes = { "tex", "plaintex", "bib" },
             settings = {
                 texlab = {
@@ -257,7 +261,11 @@ mason_lspconfig.setup_handlers({
                     },
                     forwardSearch = {
                         executable = "zathura",
-                        args = { "--synctex-forward", "%l:1:%f", "%p" },
+                        args = {
+                            "--synctex-forward",
+                            "%l:1:%f",
+                            "%p",
+                        },
                         onSave = true,
                     },
                     chktex = {

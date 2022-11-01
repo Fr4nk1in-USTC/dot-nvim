@@ -22,29 +22,29 @@ map("n", "<leader>ro", dap.repl.open, opts, "Open REPL")
 map("n", "<leader>rl", dap.run_last, opts, "Run last")
 
 -- Breakpoint Icon Setting
-vim.highlight.create("DapBreakpoint", {
+vim.api.nvim_set_hl(0, "DapBreakpoint", {
     ctermbg = 0,
-    guifg = "#993939",
-    guibg = "#8a5151",
-}, false)
-vim.highlight.create("DapLine", {
+    fg = "#993939",
+    bg = "#8a5151",
+})
+vim.api.nvim_set_hl(0, "DapLine", {
     ctermbg = 0,
-    guibg = "#8a5151",
-}, false)
-vim.highlight.create("DapLogPoint", {
+    bg = "#8a5151",
+})
+vim.api.nvim_set_hl(0, "DapLogPoint", {
     ctermbg = 0,
-    guifg = "#61afef",
-    guibg = "#8a5151",
-}, false)
-vim.highlight.create("DapStopped", {
+    fg = "#61afef",
+    bg = "#8a5151",
+})
+vim.api.nvim_set_hl(0, "DapStopped", {
     ctermbg = 0,
-    guifg = "#98c379",
-    guibg = "#515c8a",
-}, false)
-vim.highlight.create("DapStoppedLine", {
+    fg = "#98c379",
+    bg = "#515c8a",
+})
+vim.api.nvim_set_hl(0, "DapStoppedLine", {
     ctermbg = 0,
-    guibg = "#515c8a",
-}, false)
+    bg = "#515c8a",
+})
 
 vim.fn.sign_define("DapBreakpoint", {
     text = "",
@@ -156,7 +156,7 @@ dap.adapters.cppdbg = function(cb, config)
     local adapter = {
         id = "cppdbg",
         type = "executable",
-        command = "/home/fushen/.local/share/nvim/dapinstall/ccppr_vsc/extension/debugAdapters/bin/OpenDebugAD7",
+        command = "/home/fushen/.local/share/nvim/mason/bin/OpenDebugAD7",
     }
     cb(adapter)
 end

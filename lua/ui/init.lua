@@ -8,5 +8,7 @@ require("ui.telescope") -- telescope for fuzzy finder
 require("ui.terminal") -- toggleterm for terminal
 -- require("ui.shade") -- shade inactive windows
 require("ui.colorizer") -- colorize color in code
+require("ui.indent")
+require("ui.zen")
 
 vim.opt.laststatus = 3 -- use global statusline

@@ -8,13 +8,10 @@ local config = {}
 local extensions = {
     "lazygit",
     "notify",
-    -- "media_files"
+    -- "media_files",
 }
 for _, ext in pairs(extensions) do
-    local ext_status, _ = pcall(require, "telescope._extension." .. ext)
-    if ext_status then
-        table.insert(config, telescope.load_extension(ext))
-    end
+    table.insert(config, telescope.load_extension(ext))
 end
 
 require("telescope").setup(config)
