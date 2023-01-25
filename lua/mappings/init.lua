@@ -2,4 +2,4 @@
 vim.g.mapleader = " "
 
 -- Keymap section
-local mapping = require("helper.mapping")
+local map = require("helper.mapping")

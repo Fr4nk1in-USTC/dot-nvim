@@ -1,17 +1,9 @@
-local status, alpha = pcall(require, "alpha")
-if not status then
-    return
-end
-
+local alpha = require("alpha")
 local theta = require("alpha.themes.theta")
 local dashboard = require("alpha.themes.dashboard")
+local plenary_path = require("plenary.path")
 
 ------ MRU Functions From Alpha Theta ------
-
-local path_ok, plenary_path = pcall(require, "plenary.path")
-if not path_ok then
-    return
-end
 
 local cdir = vim.fn.getcwd()
 local if_nil = vim.F.if_nil
@@ -242,4 +234,4 @@ config.layout = {
     footer,
 }
 
-alpha.setup(config)
+return config

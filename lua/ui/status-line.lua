@@ -19,13 +19,7 @@
 -- vim.cmd("colorscheme nightfox")
 -- require('user.ui.feline')
 -- ```
---
--- This assumes that this file is located at `lua/user/ui/feline.lua`
-local status, feline = pcall(require, "feline")
-if not status then
-    return
-end
-
+local feline = require("feline")
 local fmt = string.format
 
 ----------------------------------------------------------------------------------------------------
@@ -170,27 +164,27 @@ _G._generate_user_statusline_highlights = function()
         },
         Red = {
             fg = pal.red,
-            bg = pal.sl.bg
+            bg = pal.black
         },
         Green = {
             fg = pal.green,
-            bg = pal.sl.bg
+            bg = pal.black
         },
         Yellow = {
             fg = pal.yellow,
-            bg = pal.sl.bg
+            bg = pal.black
         },
         Blue = {
             fg = pal.blue,
-            bg = pal.sl.bg
+            bg = pal.black
         },
         Magenta = {
             fg = pal.magenta,
-            bg = pal.sl.bg
+            bg = pal.black
         },
         Cyan = {
             fg = pal.cyan,
-            bg = pal.sl.bg
+            bg = pal.black
         },
         White = {
             fg = pal.white,
@@ -223,22 +217,22 @@ _G._generate_user_statusline_highlights = function()
     local groups = {
         -- statusline
         UserSLHint = {
-            fg = pal.sl.bg,
+            fg = pal.black,
             bg = pal.hint,
             bold = true,
         },
         UserSLInfo = {
-            fg = pal.sl.bg,
+            fg = pal.black,
             bg = pal.info,
             bold = true,
         },
         UserSLWarn = {
-            fg = pal.sl.bg,
+            fg = pal.black,
             bg = pal.warn,
             bold = true,
         },
         UserSLError = {
-            fg = pal.sl.bg,
+            fg = pal.black,
             bg = pal.error,
             bold = true,
         },
@@ -264,35 +258,39 @@ _G._generate_user_statusline_highlights = function()
             fg = pal.warn,
             bg = pal.error,
         },
-        UserSLErrorStatus = {
+        UserSLErrorBg = {
             fg = pal.error,
-            bg = status.bg,
-        },
-        UserSLStatusBg = {
-            fg = status.bg,
             bg = pal.sl.bg,
         },
 
         UserSLAlt = pal.sel,
+        UserSLAltBg = {
+            fg = pal.sel.bg,
+            bg = pal.sl.bg,
+        },
+        UserSLEncode = {
+            fg = pal.sl.fg,
+            bg = pal.black,
+        },
         UserSLAltSep = {
-            fg = pal.sl.bg,
+            fg = pal.black,
             bg = pal.sel.bg,
         },
         UserSLGitBranch = {
             fg = pal.yellow,
-            bg = pal.sl.bg,
+            bg = pal.black,
         },
         UserSLGitAdd = {
             fg = pal.green,
-            bg = pal.sl.bg,
+            bg = pal.black,
         },
         UserSLGitChange = {
             fg = pal.yellow,
-            bg = pal.sl.bg,
+            bg = pal.black,
         },
         UserSLGitRemove = {
             fg = pal.red,
-            bg = pal.sl.bg,
+            bg = pal.black,
         },
     }
 
@@ -518,8 +516,8 @@ local c = {
                 hl = "UserSLAltSep",
             },
             right_sep = {
-                str = " ",
-                hl = "UserSLAltSep",
+                str = "█",
+                hl = "UserSLAltBg",
             },
         },
         encode = {
@@ -527,7 +525,7 @@ local c = {
                 local os = icons[vim.bo.fileformat] or ""
                 return fmt(" %s %s ", os, vim.bo.fileencoding)
             end,
-            hl = "StatusLine",
+            hl = "UserSLEncode",
             left_sep = {
                 str = icons.left_filled,
                 hl = "UserSLAltSep",
@@ -543,21 +541,13 @@ local c = {
             provider = function()
                 -- TODO: What about 4+ diget line numbers?
                 return fmt(" %d:%d ", unpack(vim.api.nvim_win_get_cursor(0)))
+                    .. require("feline.providers.cursor").line_percentage()
+                    .. " "
             end,
             hl = vi_mode_hl,
             left_sep = {
                 str = icons.left_filled,
                 hl = vi_sep_hl,
-            },
-        },
-        percent = {
-            provider = function()
-                return " " .. require("feline.providers.cursor").line_percentage() .. " "
-            end,
-            hl = vi_mode_hl,
-            left_sep = {
-                str = icons.left,
-                hl = vi_mode_hl,
             },
         },
     },
@@ -566,38 +556,16 @@ local c = {
         hl = "StatusLine",
     },
     lsp = {
-        status = {
-            provider = function()
-                local nv_status, navic = pcall(require, "nvim-navic")
-                if not nv_status or not navic.is_available() then
-                    return ""
-                end
-                local location = navic.get_location({
-                    depth_limit = 2,
-                    depth_imit_indicator = ".",
-                })
-                if location == "" then
-                    return ""
-                end
-                return " ◦ " .. location .. " "
-            end,
-            hl = "UserSLStatus",
-            left_sep = {
-                str = "",
-                hl = "UserSLStatusBg",
-                always_visible = true,
-            },
-            right_sep = {
-                str = "",
-                hl = "UserSLErrorStatus",
-                always_visible = true,
-            },
-        },
         error = {
             provider = function()
                 return get_diag("ERROR")
             end,
             hl = "UserSLError",
+            left_sep = {
+                str = "",
+                hl = "UserSLErrorBg",
+                always_visible = true,
+            },
             right_sep = {
                 str = "",
                 hl = "UserSLWarnError",
@@ -650,7 +618,9 @@ local c = {
     },
 }
 
-local active = {
+local M = {}
+
+M.active = {
     { -- left
         c.vimode,
         c.git.branch,
@@ -661,7 +631,6 @@ local active = {
         c.default, -- must be last
     },
     { -- right
-        c.lsp.status,
         c.lsp.error,
         c.lsp.warn,
         c.lsp.info,
@@ -669,38 +638,12 @@ local active = {
         c.file.type,
         c.file.encode,
         c.cursor.position,
-        c.cursor.percent,
     },
 }
 
-local inactive = {
+M.inactive = {
     { c.inactive.fileinfo }, -- left
     { c.inactive.position }, -- right
 }
 
-feline.setup({
-    components = {
-        active = active,
-        inactive = inactive,
-    },
-    highlight_reset_triggers = {},
-    force_inactive = {
-        filetypes = {
-            "NvimTree",
-            "packer",
-            "dap-repl",
-            "dapui_scopes",
-            "dapui_stacks",
-            "dapui_watches",
-            "dapui_repl",
-            "LspTrouble",
-            "qf",
-            "help",
-        },
-        buftypes = { "terminal" },
-        bufnames = {},
-    },
-    disable = {
-        filetypes = { "dashboard", "startify" },
-    },
-})
+return M

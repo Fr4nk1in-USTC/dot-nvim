@@ -1,7 +1,7 @@
 local snips, autosnips = {}, {}
 
 local tex = require("helper.latex")
-local pipe = require("helper.util").pipe
+local pipe = require("helper.utils").pipe
 
 local function rec_ls()
     return sn(nil, {

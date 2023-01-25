@@ -1,7 +1,3 @@
 require("settings")
 require("mappings")
 require("packages")
-require("ui")
-require("languages")
-require("git")
-require("others")

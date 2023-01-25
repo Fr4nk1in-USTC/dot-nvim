@@ -8,22 +8,6 @@ end
 -- import my own mapping function
 local map = require("helper.mapping").map
 
--- diagnostic appearence
-vim.diagnostic.config({
-    virtual_text = true,
-    virtual_lines = false,
-    update_in_insert = true,
-})
----- Toggle diagnostic appearence
-local function toggle_diagnostic()
-    local current = vim.diagnostic.config().virtual_text
-    vim.diagnostic.config({
-        virtual_text = not current,
-        virtual_lines = current,
-        update_in_insert = not current,
-    })
-end
-
 ---- Diagnostic hints
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
@@ -36,21 +20,24 @@ local saga_status, saga = pcall(require, "lspsaga")
 
 local saga_mapping
 if saga_status then
-    saga.init_lsp_saga({
-        show_outline = {
-            win_position = "left",
-            win_with = "NvimTree",
-            auto_preview = false,
-            jump_key = "<CR>",
-            auto_refresh = true,
+    saga.setup({
+        outline = {
+            keys = {
+                jump = "<CR>",
+            },
         },
         symbol_in_winbar = {
-            enable = false,
+            enable = true,
+            separator = "  ",
+        },
+        ui = {
+            border = "rounded",
+            colors = {
+                normal_bg = "NONE",
+                title_bg = "NONE",
+            },
         },
     })
-
-    -- Outline
-    map("n", "<leader>o", "<cmd>LSoutlineToggle<CR>", nil, "Toggle LSP Outline")
 
     saga_mapping = function(bufnr)
         local bufopts = {
@@ -93,6 +80,9 @@ if saga_status then
         map("n", "]E", function()
             require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
         end, bufopts, "Goto next error")
+
+        -- Outline
+        map("n", "<leader>o", "<cmd>Lspsaga outline<CR>", nil, "Toggle LSP Outline")
     end
 else
     -- if lspsaga is not installed, use lsp native commands
@@ -138,12 +128,6 @@ else
     end
 end
 
--- check if lsp_lines is installed
-local lines_status, lines = pcall(require, "lsp_lines")
-if lines_status then
-    lines.setup()
-end
-
 -- lsp config
 ---- Use an on_attach function to only map the following keys
 ---- after the language server attaches to the current buffer
@@ -167,16 +151,7 @@ local on_attach = function(client, bufnr)
 
     saga_mapping(bufnr)
 
-    map("", "<leader>l", toggle_diagnostic, bufopts, "Toggle lsp_lines")
-
     signature_mapping(bufnr)
-
-    local navic_status, navic = pcall(require, "nvim-navic")
-    if navic_status then
-        navic.attach(client, bufnr)
-    end
-
-    client.server_capabilities.documentFormattingProvider = false
 end
 
 -- mason configuration
@@ -242,6 +217,19 @@ mason_lspconfig.setup_handlers({
             capabilities = clangd_capabilities,
         })
     end,
+    ["sumneko_lua"] = function()
+        require("lspconfig").sumneko_lua.setup({
+            on_attach = on_attach,
+            capabilities = clangd_capabilities,
+            settings = {
+                Lua = {
+                    completion = {
+                        callSnippet = "Replace",
+                    },
+                },
+            },
+        })
+    end,
     ["texlab"] = function()
         require("lspconfig").texlab.setup({
             on_attach = on_attach,
@@ -277,3 +265,14 @@ mason_lspconfig.setup_handlers({
         })
     end,
 })
+
+-- Rust-tools Configuration
+local rt_status, rt = pcall(require, "rust-tools")
+
+if rt_status then
+    rt.setup({
+        server = {
+            on_attach = on_attach,
+        },
+    })
+end
