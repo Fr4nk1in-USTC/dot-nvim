@@ -88,6 +88,26 @@ return packer.startup(function(use)
 
             local map = require("helper.mapping").map
             map("n", "<leader>nt", ":NvimTreeToggle<CR>", nil, "Toggle NvimTree")
+
+            local function open_dir(data)
+                -- buffer is a directory
+                local directory = vim.fn.isdirectory(data.file) == 1
+                if not directory then
+                    return
+                end
+                -- create a new, empty buffer
+                vim.cmd.enew()
+
+                -- wipe the directory buffer
+                vim.cmd.bw(data.buf)
+
+                -- change to the directory
+                vim.cmd.cd(data.file)
+
+                -- open the tree
+                require("nvim-tree.api").tree.open()
+            end
+            vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_dir })
         end,
     })
 
@@ -134,21 +154,16 @@ return packer.startup(function(use)
             require("bufferline").setup({
                 -- Enable/disable animations
                 animation = true,
-
                 -- Enable/disable auto-hiding the tab bar when there is a single buffer
                 auto_hide = true,
-
                 -- Enable/disable current/total tabpages indicator (top right corner)
                 tabpages = true,
-
                 -- Enable/disable close button
                 closable = true,
-
                 -- Enables/disable clickable tabs
                 --  - left-click: go to buffer
                 --  - middle-click: delete buffer
                 clickable = true,
-
                 icons = "both",
                 -- Configure icons on the bufferline.
                 icon_separator_active = "▎",
@@ -196,26 +211,26 @@ return packer.startup(function(use)
             map("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", nil, "Sort buffers by window number")
 
             -- capatibility with nvim-tree
-            local nvim_tree_events = require("nvim-tree.events")
-            local bufferline_api = require("bufferline.api")
-
-            local function get_tree_size()
-                return require("nvim-tree.view").View.width
-            end
-
-            nvim_tree_events.subscribe("TreeOpen", function()
-                bufferline_api.set_offset(get_tree_size())
-            end)
-
-            nvim_tree_events.subscribe("Resize", function()
-                bufferline_api.set_offset(get_tree_size())
-            end)
-
-            nvim_tree_events.subscribe("TreeClose", function()
-                bufferline_api.set_offset(0)
-            end)
+            -- local nvim_tree_events = require("nvim-tree.events")
+            -- local bufferline_api = require("bufferline.api")
+            --
+            -- local function get_tree_size()
+            --     return require("nvim-tree.view").View.width
+            -- end
+            --
+            -- nvim_tree_events.subscribe("TreeOpen", function()
+            --     bufferline_api.set_offset(get_tree_size())
+            -- end)
+            --
+            -- nvim_tree_events.subscribe("Resize", function()
+            --     bufferline_api.set_offset(get_tree_size())
+            -- end)
+            --
+            -- nvim_tree_events.subscribe("TreeClose", function()
+            --     bufferline_api.set_offset(0)
+            -- end)
         end,
-        requires = { "kyazdani42/nvim-tree.lua" },
+        -- requires = { "kyazdani42/nvim-tree.lua" },
     })
 
     -- LSP Config
@@ -538,6 +553,7 @@ return packer.startup(function(use)
                 mapping = cmp.mapping.preset.insert({
                     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                    ["<C-Space>"] = cmp.mapping.complete(),
                     ["<CR>"] = cmp.mapping.confirm({
                         behavior = cmp.ConfirmBehavior.Replace,
                         select = false,
@@ -549,7 +565,6 @@ return packer.startup(function(use)
                     { name = "path" },
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
-                    { name = "omni" },
                 },
                 formatting = {
                     format = lspkind.cmp_format({
@@ -723,16 +738,12 @@ return packer.startup(function(use)
             require("nvim-treesitter.configs").setup({
                 -- A list of parser names, or "all"
                 ensure_installed = { "c", "cpp", "lua", "rust", "jsonc", "python", "markdown", "latex", "vim" },
-
                 -- Install parsers synchronously (only applied to `ensure_installed`)
                 sync_install = false,
-
                 -- Automatically install missing parsers when entering buffer
                 auto_install = true,
-
                 -- List of parsers to ignore installing (for "all")
                 ignore_install = { "javascript" },
-
                 highlight = {
                     -- `false` will disable the whole extension
                     enable = true,
@@ -1097,4 +1108,7 @@ return packer.startup(function(use)
             })
         end,
     })
+
+    -- Wakatime
+    use("wakatime/vim-wakatime")
 end)

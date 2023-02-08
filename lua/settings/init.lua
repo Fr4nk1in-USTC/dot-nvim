@@ -31,6 +31,7 @@ set.mouse = "a"
 set.fileencodings = { "ucs-bom", "utf-8", "GB18030", "gbk" }
 
 set.clipboard:append("unnamedplus")
+set.clipboard:append("unnamed")
 set.whichwrap = "<,>,h,l,[,]"
 
 set.conceallevel = 0
