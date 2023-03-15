@@ -1,4 +1,3 @@
-local alpha = require("alpha")
 local theta = require("alpha.themes.theta")
 local dashboard = require("alpha.themes.dashboard")
 local plenary_path = require("plenary.path")

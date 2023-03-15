@@ -36,7 +36,7 @@ return packer.startup(function(use)
                     },
                 },
             })
-            -- setup must be called before loading
+            -- colorscheme
             vim.cmd("colorscheme nordfox")
         end,
     })
@@ -306,6 +306,9 @@ return packer.startup(function(use)
             {
                 "hrsh7th/cmp-nvim-lsp",
             },
+            {
+                "folke/neodev.nvim",
+            },
         },
         config = function()
             local on_attach = function(_, bufnr)
@@ -372,18 +375,10 @@ return packer.startup(function(use)
             clangd_capabilities.offsetEncoding = "utf-8"
 
             local mason_lspconfig = require("mason-lspconfig")
-            mason_lspconfig.setup({
-                ensure_installed = {
-                    "bashls",
-                    "sumneko_lua",
-                    "vimls",
-                    "jsonls",
-                    "pyright",
-                    "clangd",
-                    "texlab",
-                },
-                automatic_installation = true,
-            })
+            mason_lspconfig.setup()
+
+            require("neodev").setup()
+
             mason_lspconfig.setup_handlers({
                 function(server_name)
                     require("lspconfig")[server_name].setup({
@@ -397,10 +392,10 @@ return packer.startup(function(use)
                         capabilities = clangd_capabilities,
                     })
                 end,
-                ["sumneko_lua"] = function()
-                    require("lspconfig").sumneko_lua.setup({
+                ["lua_ls"] = function()
+                    require("lspconfig").lua_ls.setup({
                         on_attach = on_attach,
-                        capabilities = clangd_capabilities,
+                        capabilities = capabilities,
                         settings = {
                             Lua = {
                                 completion = {
@@ -445,6 +440,7 @@ return packer.startup(function(use)
                     })
                 end,
             })
+
             require("rust-tools").setup({
                 server = {
                     on_attach = on_attach,
@@ -553,7 +549,7 @@ return packer.startup(function(use)
                 mapping = cmp.mapping.preset.insert({
                     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                    ["<C-Space>"] = cmp.mapping.complete(),
+                    ["<C-Space>"] = cmp.mapping.complete({}),
                     ["<CR>"] = cmp.mapping.confirm({
                         behavior = cmp.ConfirmBehavior.Replace,
                         select = false,
@@ -611,16 +607,16 @@ return packer.startup(function(use)
             map({ "n", "i", "v" }, "<F12>", dap.step_out, opts, "Step out")
             map("n", "bp", dap.toggle_breakpoint, opts, "Toggle breakpoint")
             map("n", "bc", function()
-                return dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+                return dap.set_breakpoint(vim.fn.input({ "Breakpoint condition: " }))
             end, opts, "Set condition breakpoint")
             map("n", "bl", function()
-                return dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
+                return dap.set_breakpoint(nil, nil, vim.fn.input({ "Log point message: " }))
             end, opts, "Set log point")
             map("n", "<leader>ro", dap.repl.open, opts, "Open REPL")
             map("n", "<leader>rl", dap.run_last, opts, "Run last")
             map({ "n", "i", "v" }, "<F5>", function()
                 dapui.open({})
-                return dap.continue()
+                return dap.continue({})
             end, opts, "Continue or start debugging")
             map({ "n", "i", "v" }, "<F6>", function()
                 dapui.close({})
@@ -640,14 +636,6 @@ return packer.startup(function(use)
                 all_references = true,
                 highlight_new_as_changed = true,
             })
-        end,
-    })
-
-    -- Neovim Lua Development
-    use({
-        "folke/neodev.nvim",
-        config = function()
-            require("neodev").setup()
         end,
     })
 
@@ -747,7 +735,6 @@ return packer.startup(function(use)
                 highlight = {
                     -- `false` will disable the whole extension
                     enable = true,
-
                     -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
                     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
                     -- the name of the parser)
@@ -756,7 +743,6 @@ return packer.startup(function(use)
                         "tex",
                         "latex",
                     },
-
                     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
                     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
                     -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -992,7 +978,10 @@ return packer.startup(function(use)
     })
     use({
         "samodostal/image.nvim",
-        requires = { "m00qek/baleia.nvim", tag = "v1.2.0" },
+        requires = {
+            "nvim-lua/plenary.nvim",
+            { "m00qek/baleia.nvim", tag = "v1.2.0" },
+        },
         config = function()
             require("image").setup({
                 render = {
@@ -1111,4 +1100,13 @@ return packer.startup(function(use)
 
     -- Wakatime
     use("wakatime/vim-wakatime")
+
+    use({
+        "mbledkowski/neuleetcode.vim",
+        config = function()
+            vim.g.leetcode_china = true
+            vim.g.leetcode_solution_filetype = "rust"
+            vim.g.leetcode_browser = "chrome"
+        end,
+    })
 end)
